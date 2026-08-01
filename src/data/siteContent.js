@@ -106,5 +106,23 @@ export const defaultSiteContent = {
         place: "Parakou",
       },
     ],
+    skills: [
+      {
+        title: "Création web",
+        text: "Sites professionnels, applications et solutions adaptées à un besoin précis.",
+      },
+      {
+        title: "Interfaces responsives",
+        text: "Expériences claires et agréables sur ordinateur, tablette et téléphone.",
+      },
+      {
+        title: "Gestion des données",
+        text: "Organisation des informations et création de fonctionnalités fiables.",
+      },
+      {
+        title: "Vision complète",
+        text: "Compréhension du projet depuis l’idée jusqu’à sa mise en ligne.",
+      },
+    ],
   },
 };

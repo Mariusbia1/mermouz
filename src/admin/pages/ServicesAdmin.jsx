@@ -10,6 +10,8 @@ const emptyService = {
   title: "",
   short_description: "",
   description: "",
+  benefits: [],
+  inclusions: [],
   is_active: true,
 };
 const slugify = (value) =>
@@ -46,15 +48,23 @@ export default function ServicesAdmin() {
         slug: editing?.slug || slugify(title),
         short_description: String(form.get("short_description")),
         description: String(form.get("description")),
-        benefits: editing?.benefits || [],
-        inclusions: editing?.inclusions || [],
+        benefits: String(form.get("benefits") || "")
+          .split("\n")
+          .map((item) => item.trim())
+          .filter(Boolean),
+        inclusions: String(form.get("inclusions") || "")
+          .split("\n")
+          .map((item) => item.trim())
+          .filter(Boolean),
         is_active: form.get("is_active") === "true",
         display_order: editing?.display_order ?? services.length + 1,
       });
       setEditing(null);
       await load();
-    } catch {
-      setError("L’enregistrement du service a échoué.");
+    } catch (requestError) {
+      setError(
+        requestError?.message || "L’enregistrement du service a échoué.",
+      );
     }
   }
   async function toggle(service) {
@@ -150,6 +160,26 @@ export default function ServicesAdmin() {
                 name="description"
                 required
                 defaultValue={editing.description}
+              />
+            </label>
+            <label>
+              Avantages pour le client
+              <textarea
+                name="benefits"
+                required
+                defaultValue={(editing.benefits || []).join("\n")}
+                placeholder={"Un avantage par ligne\nExemple : Gagner du temps"}
+              />
+            </label>
+            <label>
+              Ce qui est inclus
+              <textarea
+                name="inclusions"
+                required
+                defaultValue={(editing.inclusions || []).join("\n")}
+                placeholder={
+                  "Un élément par ligne\nExemple : Design adapté au mobile"
+                }
               />
             </label>
             <label>

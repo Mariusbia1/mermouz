@@ -5,11 +5,11 @@ import {
   BriefcaseBusiness,
   Code2,
   Database,
+  Download,
   Github,
   GraduationCap,
   Layers3,
   Linkedin,
-  MapPin,
   MonitorSmartphone,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -98,6 +98,7 @@ export default function Resume() {
     ? content.cv.experiences
     : experiences;
   const cvEducation = content.cv.education || [];
+  const cvSkills = content.cv.skills?.length ? content.cv.skills : skills;
   return (
     <motion.main className="page inner-page career-page" {...pageMotion}>
       <section className="career-hero">
@@ -121,20 +122,9 @@ export default function Resume() {
             <a href={content.social.linkedin} target="_blank" rel="noreferrer">
               <Linkedin /> LinkedIn
             </a>
-          </div>
-        </div>
-
-        <div className="career-hero-visual">
-          <div
-            className="career-photo"
-            style={{ backgroundImage: `url(${content.profile.photoUrl})` }}
-          />
-          <div className="career-status">
-            <span>Disponible pour de nouveaux projets</span>
-          </div>
-          <div className="career-location">
-            <MapPin />
-            <span>{content.profile.location}</span>
+            <a href="/CV-Marius-Biaou.pdf" download>
+              <Download /> Télécharger mon CV
+            </a>
           </div>
         </div>
       </section>
@@ -214,13 +204,18 @@ export default function Resume() {
           <h2>Des compétences mises au service de projets concrets.</h2>
         </header>
         <div className="career-skill-grid">
-          {skills.map(({ icon: Icon, title, text }) => (
-            <article key={title}>
-              <Icon />
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
+          {cvSkills.map(({ title, text }, index) => {
+            const Icon = [Code2, MonitorSmartphone, Database, Layers3][
+              index % 4
+            ];
+            return (
+              <article key={`${title}-${index}`}>
+                <Icon />
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            );
+          })}
         </div>
       </section>
 

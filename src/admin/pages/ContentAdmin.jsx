@@ -42,6 +42,12 @@ export default function ContentAdmin() {
     );
     setSection("cv", "education", education);
   }
+  function updateSkill(index, key, value) {
+    const skills = content.cv.skills.map((item, itemIndex) =>
+      itemIndex === index ? { ...item, [key]: value } : item,
+    );
+    setSection("cv", "skills", skills);
+  }
   async function upload(event) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -83,6 +89,7 @@ export default function ContentAdmin() {
           ["about", "À propos"],
           ["experiences", "CV Expériences"],
           ["education", "CV Formations"],
+          ["skills", "CV Compétences"],
         ].map(([value, label]) => (
           <button
             type="button"
@@ -384,6 +391,65 @@ export default function ContentAdmin() {
                       "cv",
                       "education",
                       content.cv.education.filter((_, i) => i !== index),
+                    )
+                  }
+                >
+                  <Trash2 /> Retirer
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section
+          className={`admin-content-wide ${openSection === "skills" ? "" : "admin-tab-hidden"}`}
+        >
+          <div className="admin-form-section-title">
+            <span>CV</span>
+            <h2>Compétences</h2>
+            <button
+              type="button"
+              className="admin-inline-add"
+              onClick={() =>
+                setSection("cv", "skills", [
+                  ...content.cv.skills,
+                  { title: "", text: "" },
+                ])
+              }
+            >
+              <Plus /> Ajouter
+            </button>
+          </div>
+          <div className="admin-repeat-list">
+            {content.cv.skills.map((item, index) => (
+              <article key={index}>
+                <label>
+                  Compétence
+                  <input
+                    value={item.title}
+                    onChange={(event) =>
+                      updateSkill(index, "title", event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  Description
+                  <input
+                    value={item.text}
+                    onChange={(event) =>
+                      updateSkill(index, "text", event.target.value)
+                    }
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="admin-remove"
+                  onClick={() =>
+                    setSection(
+                      "cv",
+                      "skills",
+                      content.cv.skills.filter(
+                        (_, itemIndex) => itemIndex !== index,
+                      ),
                     )
                   }
                 >

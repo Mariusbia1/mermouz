@@ -147,7 +147,22 @@ export async function getSiteContent() {
     .eq("key", "main")
     .maybeSingle();
   if (error) throw error;
-  return data?.value || defaultSiteContent;
+  const stored = data?.value || {};
+  return {
+    ...defaultSiteContent,
+    ...stored,
+    profile: { ...defaultSiteContent.profile, ...stored.profile },
+    social: { ...defaultSiteContent.social, ...stored.social },
+    home: { ...defaultSiteContent.home, ...stored.home },
+    about: { ...defaultSiteContent.about, ...stored.about },
+    cv: {
+      ...defaultSiteContent.cv,
+      ...stored.cv,
+      experiences: stored.cv?.experiences || defaultSiteContent.cv.experiences,
+      education: stored.cv?.education || defaultSiteContent.cv.education,
+      skills: stored.cv?.skills || defaultSiteContent.cv.skills,
+    },
+  };
 }
 
 export async function saveSiteContent(value) {

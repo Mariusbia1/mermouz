@@ -64,8 +64,11 @@ export default function ProjectsAdmin() {
       });
       setEditing(null);
       await load();
-    } catch {
-      setError("L’enregistrement du projet a échoué.");
+    } catch (requestError) {
+      setError(
+        requestError?.message ||
+          "L’enregistrement du projet a échoué. Vérifiez le stockage Supabase.",
+      );
     }
   }
 

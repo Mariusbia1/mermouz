@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { portfolioServices } from "../data/services";
 import { pageMotion } from "../config/motion";
-import { createContactRequest } from "../lib/portfolioApi";
+import { createContactRequest, getServices } from "../lib/portfolioApi";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 
 const workSteps = [
@@ -188,11 +188,48 @@ const serviceQuality = {
 
 export default function ServiceDetail() {
   const { slug } = useParams();
-  const service = portfolioServices.find((item) => item.slug === slug);
+  const staticService = portfolioServices.find((item) => item.slug === slug);
+  const [service, setService] = useState(staticService || null);
+  const [loadingService, setLoadingService] = useState(!staticService);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [formError, setFormError] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+
+  useEffect(() => {
+    setLoadingService(!staticService);
+    getServices({ activeOnly: true })
+      .then((services) => {
+        const stored = services.find((item) => item.slug === slug);
+        if (!stored) return;
+        const base = portfolioServices.find(
+          (item) => item.slug === stored.slug,
+        );
+        setService({
+          ...base,
+          ...stored,
+          short: stored.short_description,
+          intro: stored.description,
+          importance: stored.description,
+          outcomes: stored.benefits?.length
+            ? stored.benefits
+            : base?.outcomes || [],
+          deliverables: stored.inclusions?.length
+            ? stored.inclusions
+            : base?.deliverables || [],
+          icon: base?.icon || Wrench,
+        });
+      })
+      .finally(() => setLoadingService(false));
+  }, [slug]);
+
+  if (loadingService) {
+    return (
+      <main className="page inner-page service-loading">
+        Chargement du service
+      </main>
+    );
+  }
 
   if (!service) {
     return (
@@ -204,7 +241,8 @@ export default function ServiceDetail() {
   }
 
   const Icon = service.icon;
-  const qualityFeatures = serviceQuality[service.slug] || [];
+  const qualityFeatures =
+    serviceQuality[service.slug] || serviceQuality["developpement-web"];
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -276,6 +314,19 @@ export default function ServiceDetail() {
                 </div>
               ))}
             </div>
+            {service.deliverables.length > 0 && (
+              <div className="detail-deliverables">
+                <h3>Ce qui est inclus dans votre accompagnement</h3>
+                <div className="included-list">
+                  {service.deliverables.map((item) => (
+                    <div key={item}>
+                      <Check />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="quality-grid">
               {qualityFeatures.map(({ icon: FeatureIcon, title, text }) => (
                 <article key={title}>
