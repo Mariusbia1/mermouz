@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
+import { useSiteContent } from "../hooks/useSiteContent";
 
 export default function Home() {
+  const content = useSiteContent();
   return (
     <motion.main className="page home" {...pageMotion}>
       <section className="home-hero neo-hero">
@@ -13,27 +15,20 @@ export default function Home() {
             <span>Disponible pour de nouveaux projets</span>
           </div>
           <p className="neo-name">
-            BIAOU MARIUS <em>/ MERMOUZ</em>
+            {content.profile.fullName.toUpperCase()}{" "}
+            <em>/ {content.profile.alias.toUpperCase()}</em>
           </p>
           <h1>
-            Je crée des sites web
+            {content.home.titleLine1}
             <br />
-            qui attirent vos clients
+            {content.home.titleLine2}
             <br />
             <span className="growth-line">
-              et font grandir <em>votre activité.</em>
+              {content.home.titleLine3} <em>{content.home.titleAccent}</em>
             </span>
           </h1>
-          <p className="neo-lead">
-            Vous avez une entreprise ou une idée. Je construis le site qui la
-            rend visible, crédible et accessible à vos futurs clients.
-          </p>
-          <p className="neo-description">
-            Que votre objectif soit de vendre en ligne, recevoir plus de
-            demandes ou présenter vos services, je crée une solution moderne et
-            simple à utiliser. Vous gérez votre métier. Je m’occupe de votre
-            présence sur le web.
-          </p>
+          <p className="neo-lead">{content.home.lead}</p>
+          <p className="neo-description">{content.home.description}</p>
           <div className="neo-actions">
             <Link className="neo-primary" to="/contact">
               Parlons de votre projet{" "}
@@ -56,6 +51,7 @@ export default function Home() {
           <div className="neo-card">
             <div
               className="neo-portrait"
+              style={{ backgroundImage: `url(${content.profile.photoUrl})` }}
               role="img"
               aria-label="Portrait de BIAOU Marius"
             />

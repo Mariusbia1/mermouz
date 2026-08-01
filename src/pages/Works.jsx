@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Blocks, ShoppingBag, Workflow } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
+import { getProjects } from "../lib/portfolioApi";
 
 const projects = [
   {
@@ -37,6 +38,23 @@ const projects = [
 ];
 
 export default function Works() {
+  const [visibleProjects, setVisibleProjects] = useState(projects);
+  useEffect(() => {
+    getProjects({ publishedOnly: true })
+      .then((data) => {
+        if (!data.length) return;
+        setVisibleProjects(
+          data.map((item, index) => ({
+            ...item,
+            description: item.summary,
+            tags: [],
+            icon: [Blocks, Workflow, ShoppingBag][index % 3],
+            tone: ["blue", "navy", "slate"][index % 3],
+          })),
+        );
+      })
+      .catch(() => {});
+  }, []);
   return (
     <motion.main className="page inner-page projects-page" {...pageMotion}>
       <header className="page-head projects-head">
@@ -53,15 +71,16 @@ export default function Works() {
       </header>
 
       <section className="projects-grid">
-        {projects.map(
+        {visibleProjects.map(
           ({
             title,
             category,
             description,
-            result,
             tags,
             icon: Icon,
             tone,
+            project_url,
+            image_url,
           }) => (
             <article
               className={`project-card project-card-${tone}`}
@@ -70,24 +89,42 @@ export default function Works() {
               <div className="project-card-visual">
                 <span className="project-category">{category}</span>
                 <Icon />
-                <div className="project-window">
-                  <i />
-                  <i />
-                  <i />
-                </div>
+                {image_url ? (
+                  <div className="project-device-showcase">
+                    <div className="device desktop">
+                      <div className="device-bar" />
+                      <img src={image_url} alt={`Capture de ${title}`} />
+                    </div>
+                    <div className="device tablet">
+                      <img src={image_url} alt="" />
+                    </div>
+                    <div className="device mobile">
+                      <span />
+                      <img src={image_url} alt="" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="project-window">
+                    <i />
+                    <i />
+                    <i />
+                  </div>
+                )}
               </div>
               <div className="project-card-body">
                 <div className="project-card-title">
                   <h2>{title}</h2>
-                  <span>
-                    <ArrowUpRight />
-                  </span>
+                  {project_url ? (
+                    <a href={project_url} target="_blank" rel="noreferrer">
+                      <ArrowUpRight />
+                    </a>
+                  ) : (
+                    <span>
+                      <ArrowUpRight />
+                    </span>
+                  )}
                 </div>
                 <p>{description}</p>
-                <div className="project-result">
-                  <strong>Résultat</strong>
-                  <span>{result}</span>
-                </div>
                 <div className="project-tags">
                   {tags.map((tag) => (
                     <span key={tag}>{tag}</span>

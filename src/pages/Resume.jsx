@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
+import { useSiteContent } from "../hooks/useSiteContent";
 
 const experiences = [
   {
@@ -92,6 +93,11 @@ const skills = [
 ];
 
 export default function Resume() {
+  const content = useSiteContent();
+  const cvExperiences = content.cv.experiences?.length
+    ? content.cv.experiences
+    : experiences;
+  const cvEducation = content.cv.education || [];
   return (
     <motion.main className="page inner-page career-page" {...pageMotion}>
       <section className="career-hero">
@@ -101,11 +107,7 @@ export default function Resume() {
             J’apprends en construisant.
             <em> Je progresse en pratiquant.</em>
           </h1>
-          <p>
-            Je suis BIAOU Marius, développeur web et diplômé en Informatique de
-            gestion. Mon parcours rassemble formation, expériences en
-            entreprise, concours et missions freelance.
-          </p>
+          <p>{content.cv.introduction}</p>
           <div className="career-links">
             <Link className="neo-primary" to="/contact">
               Travaillons ensemble
@@ -113,35 +115,26 @@ export default function Resume() {
                 <ArrowUpRight />
               </span>
             </Link>
-            <a
-              href="https://github.com/Mariusbia1"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={content.social.github} target="_blank" rel="noreferrer">
               <Github /> GitHub
             </a>
-            <a
-              href="https://www.linkedin.com/in/Marius%20BIAOU"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={content.social.linkedin} target="_blank" rel="noreferrer">
               <Linkedin /> LinkedIn
             </a>
           </div>
         </div>
 
         <div className="career-hero-visual">
-          <div className="career-photo" />
+          <div
+            className="career-photo"
+            style={{ backgroundImage: `url(${content.profile.photoUrl})` }}
+          />
           <div className="career-status">
             <span>Disponible pour de nouveaux projets</span>
           </div>
           <div className="career-location">
             <MapPin />
-            <span>
-              Abomey-Calavi
-              <br />
-              Bénin
-            </span>
+            <span>{content.profile.location}</span>
           </div>
         </div>
       </section>
@@ -170,7 +163,7 @@ export default function Resume() {
           <h2>Des étapes qui ont construit ma façon de travailler.</h2>
         </header>
         <div className="career-timeline">
-          {experiences.map((item) => (
+          {cvExperiences.map((item) => (
             <article key={`${item.company}-${item.period}`}>
               <div className="career-date">
                 <i className={item.current ? "active" : ""} />
@@ -201,18 +194,14 @@ export default function Resume() {
           </h2>
         </header>
         <div className="education-cards">
-          <article>
-            <span>2022 à 2025</span>
-            <h3>Licence en Informatique de gestion</h3>
-            <p>Institut Universitaire de Technologie de Parakou</p>
-            <strong>Parakou</strong>
-          </article>
-          <article>
-            <span>2021 à 2022</span>
-            <h3>Baccalauréat</h3>
-            <p>Collège Catholique Saint Thomas d’Aquin</p>
-            <strong>Parakou</strong>
-          </article>
+          {cvEducation.map((item) => (
+            <article key={`${item.title}-${item.period}`}>
+              <span>{item.period}</span>
+              <h3>{item.title}</h3>
+              <p>{item.school}</p>
+              <strong>{item.place}</strong>
+            </article>
+          ))}
         </div>
       </section>
 

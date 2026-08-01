@@ -29,6 +29,8 @@ import {
 } from "lucide-react";
 import { portfolioServices } from "../data/services";
 import { pageMotion } from "../config/motion";
+import { createContactRequest } from "../lib/portfolioApi";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 
 const workSteps = [
   {
@@ -188,6 +190,9 @@ export default function ServiceDetail() {
   const { slug } = useParams();
   const service = portfolioServices.find((item) => item.slug === slug);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
 
   if (!service) {
     return (
@@ -201,9 +206,32 @@ export default function ServiceDetail() {
   const Icon = service.icon;
   const qualityFeatures = serviceQuality[service.slug] || [];
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    setSent(true);
+    setSending(true);
+    setFormError("");
+    const form = new FormData(event.currentTarget);
+    if (!whatsapp || !isValidPhoneNumber(whatsapp)) {
+      setFormError(
+        "Sélectionnez votre pays et renseignez un numéro WhatsApp valide.",
+      );
+      setSending(false);
+      return;
+    }
+    try {
+      await createContactRequest({
+        name: String(form.get("name")),
+        email: String(form.get("email")),
+        whatsapp,
+        message: String(form.get("message")),
+        service_slug: service.slug,
+      });
+      setSent(true);
+    } catch {
+      setFormError("La demande n’a pas pu être envoyée. Veuillez réessayer.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -291,10 +319,10 @@ export default function ServiceDetail() {
           {sent ? (
             <div className="quote-success">
               <Check />
-              <h3>Votre demande est prête.</h3>
+              <h3>Votre demande a bien été envoyée.</h3>
               <p>
-                Le formulaire sera connecté au backend Supabase pendant la
-                prochaine étape du projet.
+                Je prendrai rapidement contact avec vous pour discuter de votre
+                projet.
               </p>
             </div>
           ) : (
@@ -305,10 +333,15 @@ export default function ServiceDetail() {
               </label>
               <label>
                 Votre numéro WhatsApp
-                <input
+                <PhoneInput
                   name="phone"
-                  type="tel"
-                  placeholder="Votre numéro"
+                  international
+                  defaultCountry="BJ"
+                  countryCallingCodeEditable={false}
+                  value={whatsapp}
+                  onChange={(value) => setWhatsapp(value || "")}
+                  error={whatsapp ? !isValidPhoneNumber(whatsapp) : undefined}
+                  placeholder="Votre numéro WhatsApp"
                   required
                 />
               </label>
@@ -333,8 +366,10 @@ export default function ServiceDetail() {
                   required
                 />
               </label>
+              {formError && <p className="quote-form-error">{formError}</p>}
               <button type="submit" className="quote-submit">
-                Recevoir une proposition <Send />
+                {sending ? "Envoi en cours" : "Recevoir une proposition"}{" "}
+                <Send />
               </button>
             </form>
           )}
@@ -342,7 +377,6 @@ export default function ServiceDetail() {
           <div className="quote-reassurance">
             <span>
               <Clock3 /> Réponse sous 24 heures au plus
-
             </span>
             <span>
               <MessageCircle /> Premier échange sans engagement

@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { FaFacebookF, FaGithub, FaWhatsapp } from "react-icons/fa6";
+import { recordVisit } from "../lib/portfolioApi";
+import { useSiteContent } from "../hooks/useSiteContent";
 
-export default function Layout({ children }) {
+export default function Layout() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const content = useSiteContent();
 
   useEffect(() => {
     setLoading(true);
     const timer = window.setTimeout(() => setLoading(false), 850);
 
     return () => window.clearTimeout(timer);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    recordVisit(location.pathname).catch(() => {
+      // Les statistiques ne doivent jamais bloquer l’affichage du site.
+    });
   }, [location.pathname]);
 
   return (
@@ -63,21 +72,38 @@ export default function Layout({ children }) {
           </button>
         </div>
       </header>
-      {children}
+      <Outlet />
       <footer className="site-footer">
         <div className="footer-inner">
           <Link className="brand" to="/">
             mermouz<em>.</em>
           </Link>
-          <span>BIAOU Marius · Abomey-Calavi, Bénin</span>
+          <span>
+            {content.profile.fullName} · {content.profile.location}
+          </span>
           <div className="social-links">
-            <a href="#" aria-label="GitHub">
+            <a
+              href={content.social.github}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+            >
               <FaGithub />
             </a>
-            <a href="#" aria-label="Facebook">
+            <a
+              href={content.social.facebook}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+            >
               <FaFacebookF />
             </a>
-            <a href="#" aria-label="WhatsApp">
+            <a
+              href={content.social.whatsapp}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="WhatsApp"
+            >
               <FaWhatsapp />
             </a>
           </div>
