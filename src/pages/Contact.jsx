@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { pageMotion } from "../config/motion";
 import { createContactRequest } from "../lib/portfolioApi";
+import { useSiteContent } from "../hooks/useSiteContent";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 export default function Contact() {
+  const content = useSiteContent();
   const [status, setStatus] = useState("idle");
   const [whatsapp, setWhatsapp] = useState("");
 
@@ -49,8 +51,8 @@ export default function Contact() {
             Un projet, une idée ou un problème à résoudre ? Écrivez-moi. Je
             réponds généralement sous 24 heures.
           </p>
-          <a href="mailto:hello@mermouz.com">
-            hello@mermouz.com <ArrowUpRight />
+          <a href={`mailto:${content.profile.email}`}>
+            {content.profile.email} <ArrowUpRight />
           </a>
         </div>
         <form onSubmit={submit}>

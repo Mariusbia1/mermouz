@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, MapPin } from "lucide-react";
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  GraduationCap,
+  MapPin,
+  MonitorSmartphone,
+  Users,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
 import { useSiteContent } from "../hooks/useSiteContent";
@@ -22,6 +29,7 @@ export default function About() {
           <p className="about-opening">{content.about.opening}</p>
           <p>{content.about.story1}</p>
           <p>{content.about.story2}</p>
+          <p>{content.about.story3}</p>
           <div className="about-actions">
             <Link className="neo-primary" to="/cv">
               Découvrir mon parcours
@@ -47,6 +55,44 @@ export default function About() {
               <strong>+2 ans</strong> à apprendre, créer et progresser
             </span>
           </div>
+        </div>
+      </section>
+
+      <section className="about-now">
+        <header className="about-now-head">
+          <span>QUI JE SUIS AUJOURD’HUI</span>
+          <h2>Un développeur impliqué dans chaque projet.</h2>
+          <p>
+            Mon travail ne consiste pas seulement à écrire du code. Je cherche à
+            comprendre ce que votre activité doit améliorer et à construire une
+            réponse claire, fiable et durable.
+          </p>
+        </header>
+        <div className="about-now-grid">
+          <article>
+            <BriefcaseBusiness />
+            <span>MON ACTIVITÉ ACTUELLE</span>
+            <h3>Développeur chez OLRAF SARL</h3>
+            <p>{content.about.currentRole}</p>
+          </article>
+          <article>
+            <Users />
+            <span>ACCOMPAGNEMENT</span>
+            <h3>Freelance auprès des entrepreneurs</h3>
+            <p>{content.about.freelance}</p>
+          </article>
+          <article>
+            <GraduationCap />
+            <span>MON PROFIL</span>
+            <h3>Informatique et vision d’entreprise</h3>
+            <p>{content.about.approach}</p>
+          </article>
+          <article>
+            <MonitorSmartphone />
+            <span>MA VISION</span>
+            <h3>Créer une solution qui sert vraiment</h3>
+            <p>{content.about.ambition}</p>
+          </article>
         </div>
       </section>
 

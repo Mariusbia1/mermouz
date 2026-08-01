@@ -6316,6 +6316,106 @@ textarea {
 .career-kicker {
   display: block;
   text-align: center;
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+/* Présentation personnelle enrichie */
+.about-now {
+  margin-top: 7rem;
+  padding-top: 5rem;
+  border-top: 1px solid var(--line);
+}
+.about-now-head {
+  max-width: 820px;
+  margin: 0 auto 3.5rem;
+  text-align: center;
+}
+.about-now-head > span {
+  color: var(--blue);
+  font:
+    500 0.66rem "Chillax",
+    sans-serif;
+  letter-spacing: 0.16em;
+}
+.about-now-head h2 {
+  margin: 1.2rem 0 1rem;
+  font:
+    500 clamp(2rem, 3vw, 3.2rem) / 1.05 "Chillax",
+    sans-serif;
+  letter-spacing: -0.05em;
+}
+.about-now-head p {
+  max-width: 680px;
+  margin: 0 auto;
+  color: #84919d;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.about-now-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--line);
+}
+.about-now-grid article {
+  min-height: 290px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-bottom: 1px solid var(--line);
+  background: rgba(11, 17, 24, 0.48);
+}
+.about-now-grid article:nth-child(odd) {
+  border-right: 1px solid var(--line);
+}
+.about-now-grid article:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+.about-now-grid svg {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 2.5rem;
+  color: var(--blue);
+  stroke-width: 1.35;
+}
+.about-now-grid article > span {
+  display: block;
+  color: #6f8293;
+  font:
+    500 0.58rem "Chillax",
+    sans-serif;
+  letter-spacing: 0.13em;
+}
+.about-now-grid h3 {
+  margin: 0.75rem 0 1rem;
+  color: #d7e0e8;
+  font:
+    500 clamp(1.2rem, 1.7vw, 1.55rem) / 1.2 "Chillax",
+    sans-serif;
+  letter-spacing: -0.035em;
+}
+.about-now-grid p {
+  max-width: 540px;
+  margin: 0;
+  color: #7e8b97;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* Footer entièrement centré */
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15rem;
+  text-align: center;
+}
+.footer-inner > .social-links {
+  justify-self: auto;
+  justify-content: center;
+}
+.footer-inner small {
+  align-self: stretch;
 }
 @media (max-width: 800px) {
   .site-nav {
@@ -6428,5 +6528,25 @@ textarea {
   }
   .career-links {
     justify-content: center;
+  }
+  .about-now {
+    margin-top: 4.5rem;
+    padding-top: 3.5rem;
+  }
+  .about-now-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-now-grid article,
+  .about-now-grid article:nth-child(odd),
+  .about-now-grid article:nth-last-child(-n + 2) {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .about-now-grid article:last-child {
+    border-bottom: 0;
+  }
+  .about-now-grid svg {
+    margin-bottom: 1.8rem;
   }
 }

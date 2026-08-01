@@ -75,30 +75,36 @@ export default function Layout() {
             {content.profile.fullName} · {content.profile.location}
           </span>
           <div className="social-links">
-            <a
-              href={content.social.github}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
-            >
-              <FaGithub />
-            </a>
-            <a
-              href={content.social.facebook}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Facebook"
-            >
-              <FaFacebookF />
-            </a>
-            <a
-              href={content.social.whatsapp}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="WhatsApp"
-            >
-              <FaWhatsapp />
-            </a>
+            {content.social.github && (
+              <a
+                href={content.social.github}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="GitHub"
+              >
+                <FaGithub />
+              </a>
+            )}
+            {content.social.facebook && (
+              <a
+                href={content.social.facebook}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Facebook"
+              >
+                <FaFacebookF />
+              </a>
+            )}
+            {content.social.whatsapp && (
+              <a
+                href={content.social.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp"
+              >
+                <FaWhatsapp />
+              </a>
+            )}
           </div>
           <small>© 2026. Tous droits réservés</small>
         </div>

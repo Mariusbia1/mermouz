@@ -32,6 +32,16 @@ export const defaultSiteContent = {
       "À Parakou, pendant ma licence en Informatique de gestion, j’ai appris à relier la technologie et les besoins d’une entreprise.",
     story2:
       "Les stages, les projets et le travail en freelance m’ont appris la rigueur, l’écoute et l’importance des détails.",
+    story3:
+      "Aujourd’hui, je travaille comme développeur web chez OLRAF SARL à Abomey-Calavi, tout en accompagnant des entrepreneurs et des entreprises en freelance.",
+    currentRole:
+      "Chez OLRAF SARL, je participe à la création et à l’amélioration de solutions numériques pensées pour répondre à des besoins concrets.",
+    freelance:
+      "En freelance, j’aide mes clients à transformer une idée en un site, une boutique ou un outil en ligne clair, professionnel et facile à utiliser.",
+    approach:
+      "Je prends le temps de comprendre l’activité, les objectifs et les utilisateurs avant de concevoir. Je privilégie une communication simple, un travail soigné et des choix utiles.",
+    ambition:
+      "Mon objectif est de construire des solutions qui renforcent la crédibilité d’une activité, facilitent le travail quotidien et créent de vraies opportunités.",
   },
   cv: {
     introduction:
