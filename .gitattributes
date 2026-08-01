@@ -1,0 +1,5 @@
+.venv/** linguist-vendored
+venv/** linguist-vendored
+node_modules/** linguist-vendored
+dist/** linguist-generated
+

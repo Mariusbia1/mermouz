@@ -119,6 +119,15 @@ button,input,textarea { font:inherit; }
 .admin-service-grid article footer{gap:.65rem;align-items:center}.admin-service-grid article footer button{min-height:42px;padding:.72rem 1rem;align-items:center;justify-content:center;border-radius:8px;font-size:.68rem;transition:background .2s,border-color .2s,color .2s,transform .2s}.admin-service-grid article footer button:first-child{background:rgba(107,157,207,.14);border-color:rgba(107,157,207,.28);color:#bcd0e1}.admin-service-grid article footer button:nth-child(2){background:rgba(255,255,255,.025)}.admin-service-grid article footer button:hover{transform:translateY(-2px);border-color:var(--blue);color:#dce7ef}.admin-service-grid article footer .admin-delete-action{margin-left:auto;background:rgba(190,92,92,.06);border-color:rgba(190,92,92,.16);color:#c48686}.admin-service-grid article footer .admin-delete-action:hover{border-color:#b96868;color:#e0a0a0;background:rgba(190,92,92,.12)}.admin-service-grid article footer svg{width:16px;height:16px}
 @media(max-width:620px){.admin-service-grid article footer{display:grid;grid-template-columns:1fr 1fr}.admin-service-grid article footer .admin-delete-action{grid-column:1/-1;width:100%;margin:0}}
 
+/* Portrait complet sur À propos et CV */
+.about-photo,.career-photo{
+  background-color:#0d1a29;
+  background-size:contain!important;
+  background-position:center bottom!important;
+  background-repeat:no-repeat!important;
+}
+.about-photo-wrap,.career-hero-visual{background:radial-gradient(circle at 50% 34%,rgba(56,100,153,.28),rgba(8,15,23,.25) 60%,transparent 78%)}
+
 /* Conteneurs centraux */
 .neo-hero,
 .inner-page{
