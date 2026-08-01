@@ -151,7 +151,14 @@ export async function getSiteContent() {
   return {
     ...defaultSiteContent,
     ...stored,
-    profile: { ...defaultSiteContent.profile, ...stored.profile },
+    profile: {
+      ...defaultSiteContent.profile,
+      ...stored.profile,
+      photoUrl:
+        stored.profile?.photoUrl === "/marius-navy-portrait.png"
+          ? "/marius-navy-portrait-optimized.jpg"
+          : stored.profile?.photoUrl || defaultSiteContent.profile.photoUrl,
+    },
     social: { ...defaultSiteContent.social, ...stored.social },
     home: { ...defaultSiteContent.home, ...stored.home },
     about: { ...defaultSiteContent.about, ...stored.about },
@@ -160,7 +167,11 @@ export async function getSiteContent() {
       ...stored.cv,
       experiences: stored.cv?.experiences || defaultSiteContent.cv.experiences,
       education: stored.cv?.education || defaultSiteContent.cv.education,
-      skills: stored.cv?.skills || defaultSiteContent.cv.skills,
+      skills:
+        !stored.cv?.skills?.length ||
+        stored.cv.skills.some((skill) => skill.title === "Création web")
+          ? defaultSiteContent.cv.skills
+          : stored.cv.skills,
     },
   };
 }

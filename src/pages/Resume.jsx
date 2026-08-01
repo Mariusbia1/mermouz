@@ -6,6 +6,7 @@ import {
   Code2,
   Database,
   Download,
+  Gauge,
   Github,
   GraduationCap,
   Layers3,
@@ -13,6 +14,14 @@ import {
   MonitorSmartphone,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  FaGitAlt,
+  FaHtml5,
+  FaJs,
+  FaLaravel,
+  FaReact,
+  FaWordpress,
+} from "react-icons/fa6";
 import { pageMotion } from "../config/motion";
 import { useSiteContent } from "../hooks/useSiteContent";
 
@@ -205,9 +214,16 @@ export default function Resume() {
         </header>
         <div className="career-skill-grid">
           {cvSkills.map(({ title, text }, index) => {
-            const Icon = [Code2, MonitorSmartphone, Database, Layers3][
-              index % 4
-            ];
+            const Icon = [
+              FaHtml5,
+              FaJs,
+              FaReact,
+              FaLaravel,
+              Database,
+              FaWordpress,
+              FaGitAlt,
+              Gauge,
+            ][index % 8];
             return (
               <article key={`${title}-${index}`}>
                 <Icon />

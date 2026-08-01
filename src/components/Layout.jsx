@@ -7,16 +7,8 @@ import { useSiteContent } from "../hooks/useSiteContent";
 
 export default function Layout() {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const content = useSiteContent();
-
-  useEffect(() => {
-    setLoading(true);
-    const timer = window.setTimeout(() => setLoading(false), 850);
-
-    return () => window.clearTimeout(timer);
-  }, [location.pathname]);
 
   useEffect(() => {
     recordVisit(location.pathname).catch(() => {
@@ -24,21 +16,15 @@ export default function Layout() {
     });
   }, [location.pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <>
-      <div
-        className={`site-loader ${loading ? "is-visible" : ""}`}
-        aria-hidden={!loading}
-      >
-        <div className="loader-mark">
-          <span className="loader-ring" />
-          <span className="loader-ring loader-ring-inner" />
-          <strong>
-            mermouz<em>.</em>
-          </strong>
-        </div>
-        <small>Création d’expériences digitales</small>
-      </div>
       <div className="ambient">
         <i />
         <i />
@@ -63,6 +49,13 @@ export default function Layout() {
                 {label}
               </NavLink>
             ))}
+            <NavLink
+              className="mobile-nav-contact"
+              to="/contact"
+              onClick={() => setOpen(false)}
+            >
+              Me contacter
+            </NavLink>
           </nav>
           <Link className="nav-contact" to="/contact">
             Me contacter <ArrowUpRight size={15} />

@@ -6,7 +6,7 @@ export const defaultSiteContent = {
     job: "Développeur web chez OLRAF SARL et freelance",
     email: "mariusbiaou75@gmail.com",
     whatsapp: "+229 01 00 00 00 00",
-    photoUrl: "/marius-navy-portrait.png",
+    photoUrl: "/marius-navy-portrait-optimized.jpg",
   },
   social: {
     github: "https://github.com/Mariusbia1",
@@ -108,20 +108,36 @@ export const defaultSiteContent = {
     ],
     skills: [
       {
-        title: "Création web",
-        text: "Sites professionnels, applications et solutions adaptées à un besoin précis.",
+        title: "HTML et CSS",
+        text: "Intégration d’interfaces web modernes, fidèles aux maquettes et adaptées à tous les écrans.",
       },
       {
-        title: "Interfaces responsives",
-        text: "Expériences claires et agréables sur ordinateur, tablette et téléphone.",
+        title: "JavaScript",
+        text: "Création d’interactions fluides et de fonctionnalités dynamiques côté navigateur.",
       },
       {
-        title: "Gestion des données",
-        text: "Organisation des informations et création de fonctionnalités fiables.",
+        title: "React",
+        text: "Développement d’interfaces rapides, structurées et faciles à faire évoluer.",
       },
       {
-        title: "Vision complète",
-        text: "Compréhension du projet depuis l’idée jusqu’à sa mise en ligne.",
+        title: "PHP et Laravel",
+        text: "Développement de fonctionnalités métier, API et espaces d’administration sécurisés.",
+      },
+      {
+        title: "Bases de données",
+        text: "Conception et gestion de données avec MySQL, PostgreSQL et Supabase.",
+      },
+      {
+        title: "WordPress, Shopify et Wix",
+        text: "Création et personnalisation de sites professionnels et de boutiques en ligne.",
+      },
+      {
+        title: "Git et GitHub",
+        text: "Gestion des versions, collaboration et publication propre des projets.",
+      },
+      {
+        title: "SEO et performance",
+        text: "Optimisation de la vitesse, de la structure et de la visibilité des sites.",
       },
     ],
   },

@@ -93,14 +93,29 @@ export default function Works() {
                   <div className="project-device-showcase">
                     <div className="device desktop">
                       <div className="device-bar" />
-                      <img src={image_url} alt={`Capture de ${title}`} />
+                      <img
+                        src={image_url}
+                        alt={`Capture de ${title}`}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                     <div className="device tablet">
-                      <img src={image_url} alt="" />
+                      <img
+                        src={image_url}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                     <div className="device mobile">
                       <span />
-                      <img src={image_url} alt="" />
+                      <img
+                        src={image_url}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                   </div>
                 ) : (
