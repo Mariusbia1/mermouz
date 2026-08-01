@@ -6288,11 +6288,11 @@ textarea {
   display: none;
 }
 .about-page {
-  padding-top: 1.25rem !important;
+  padding-top: 6rem !important;
 }
 .about-hero {
   min-height: auto !important;
-  padding-top: 1rem;
+  padding-top: 0;
 }
 .career-page {
   padding-top: 3rem;
@@ -6415,7 +6415,7 @@ textarea {
     padding-top: 3.5rem;
   }
   .about-page {
-    padding-top: 1rem !important;
+    padding-top: 3.5rem !important;
   }
   .about-hero {
     padding-top: 0;
