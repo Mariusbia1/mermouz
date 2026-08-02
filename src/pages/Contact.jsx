@@ -37,7 +37,7 @@ export default function Contact() {
 
   return (
     <motion.main className="page inner-page contact-page" {...pageMotion}>
-      <header className="page-head">
+      <header className="page-head contact-head">
         <span>CONTACT</span>
         <h1>
           Donnons vie à votre

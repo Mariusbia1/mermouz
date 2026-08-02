@@ -915,7 +915,7 @@ textarea {
 .portrait-image {
   position: absolute;
   inset: 2% 0 0;
-  background-image: url("/marius-cutout-v2.png");
+  background-image: url("/marius-navy-portrait-optimized.jpg");
   background-size: contain;
   background-position: center bottom;
   background-repeat: no-repeat;
@@ -2065,7 +2065,7 @@ textarea {
 }
 .editorial-portrait .portrait-image {
   inset: 0;
-  background-image: url("/marius-premium-cutout.png");
+  background-image: url("/marius-navy-portrait-optimized.jpg");
   background-position: center bottom;
 }
 .editorial-actions {
@@ -3300,7 +3300,7 @@ textarea {
 .value-visual > .portrait-image {
   position: absolute;
   inset: 8% 1% 0;
-  background-image: url("/marius-premium-cutout.png");
+  background-image: url("/marius-navy-portrait-optimized.jpg");
   background-size: contain;
   background-position: center bottom;
   background-repeat: no-repeat;
@@ -4652,7 +4652,8 @@ textarea {
 .resume-portrait {
   height: 340px;
   margin-bottom: 3rem;
-  background: url("/marius-navy-portrait.png") center 22% / cover no-repeat;
+  background: url("/marius-navy-portrait-optimized.jpg") center 22% / cover
+    no-repeat;
   border: 1px solid var(--line);
 }
 .resume-sidebar section {
@@ -6311,6 +6312,76 @@ textarea {
   }
 }
 
+/* Chargement sobre et en-tête Contact */
+.site-loader {
+  background: #080d13 !important;
+  background-image: none !important;
+}
+.loader-mark {
+  width: 126px;
+  height: 126px;
+}
+.loader-mark strong {
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+}
+.loader-copy {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+}
+.loader-copy > strong {
+  color: #e8edf2;
+  font:
+    600 1.15rem "Chillax",
+    sans-serif;
+  letter-spacing: -0.04em;
+}
+.loader-copy > strong em {
+  color: var(--blue);
+  font-style: normal;
+}
+.loader-copy small {
+  font-size: 0.52rem;
+}
+.contact-head {
+  max-width: 950px;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+.page-head.contact-head > span {
+  display: block;
+  color: var(--blue);
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+.page-head.contact-head h1 {
+  margin: 1.5rem auto;
+  font-size: clamp(2.65rem, 4vw, 4.5rem);
+  line-height: 0.96;
+}
+.page-head.contact-head h1 em {
+  color: var(--blue);
+  font:
+    300 italic 1em "Source Serif 4",
+    serif;
+}
+@media (max-width: 800px) {
+  .contact-head {
+    margin-bottom: 3.5rem;
+  }
+  .page-head.contact-head h1 {
+    font-size: 10.3vw;
+    line-height: 1;
+  }
+  .page-head.contact-head > span {
+    font-size: 0.95rem;
+  }
+}
+
 /* Lisibilité et finition premium du dashboard */
 .admin-shell {
   grid-template-columns: 285px 1fr;
@@ -7224,5 +7295,72 @@ textarea {
   .about-method-action .neo-primary {
     font-size: 0.61rem;
     letter-spacing: 0.045em;
+  }
+}
+
+/* Grille compacte des réalisations */
+.projects-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.project-card-visual {
+  height: 235px;
+  padding: 1.2rem;
+}
+.project-card-body {
+  padding: 1.35rem;
+}
+.project-card-title {
+  gap: 0.8rem;
+}
+.project-card-title h2 {
+  font-size: clamp(1.15rem, 1.35vw, 1.5rem);
+  line-height: 1.15;
+}
+.project-card-title > span,
+.project-card-title > a {
+  width: 36px;
+  height: 36px;
+}
+.project-card-body > p {
+  min-height: 86px;
+  margin: 0.9rem 0;
+  font-size: 0.79rem;
+  line-height: 1.6;
+}
+.project-category {
+  top: 1.2rem;
+  left: 1.2rem;
+  font-size: 0.52rem;
+}
+.project-card-visual > svg {
+  top: 1.2rem;
+  right: 1.2rem;
+  width: 25px;
+  height: 25px;
+}
+.project-tags {
+  gap: 0.35rem;
+  margin-top: 0.9rem;
+}
+.project-tags span {
+  padding: 0.38rem 0.5rem;
+  font-size: 0.48rem;
+}
+
+@media (max-width: 1150px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  .project-card-visual {
+    height: 245px;
+  }
+  .project-card-body > p {
+    min-height: 0;
   }
 }

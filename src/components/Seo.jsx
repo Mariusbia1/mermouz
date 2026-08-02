@@ -12,7 +12,7 @@ const pages = {
   "/about": {
     title: "À propos de Marius BIAOU | Développeur web au Bénin",
     description:
-      "Découvrez Marius BIAOU, développeur web à Abomey-Calavi : son parcours, sa passion, sa vision et sa méthode pour créer des sites internet utiles.",
+      "Découvrez Marius BIAOU, développeur web au Bénin : son parcours, sa passion, sa vision et sa méthode pour créer des sites internet utiles.",
   },
   "/services": {
     title: "Création de site internet et développement web | Services",
@@ -81,7 +81,7 @@ export default function Seo() {
     setMeta('meta[name="keywords"]', {
       name: "keywords",
       content:
-        "création site web Bénin, création site internet, développeur web Bénin, développeur web Abomey-Calavi, développement web, boutique en ligne, WordPress, Shopify, Wix, tunnel de vente, référencement SEO",
+        "création site web Bénin, création site internet Bénin, développeur web Bénin, développement web Bénin, boutique en ligne, WordPress, Shopify, Wix, tunnel de vente, référencement SEO",
     });
     setMeta('meta[name="robots"]', {
       name: "robots",
@@ -134,10 +134,9 @@ export default function Seo() {
       url: origin,
       image: imageUrl,
       description: defaultDescription,
-      areaServed: ["Bénin", "Abomey-Calavi", "Cotonou"],
+      areaServed: "Bénin",
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Abomey-Calavi",
         addressCountry: "BJ",
       },
       founder: {

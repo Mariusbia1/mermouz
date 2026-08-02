@@ -10,11 +10,14 @@ export default function PageLoader() {
       <div className="loader-mark">
         <span className="loader-ring" />
         <span className="loader-ring loader-ring-inner" />
+        <strong>MB</strong>
+      </div>
+      <div className="loader-copy">
         <strong>
           Marius BIAOU<em>.</em>
         </strong>
+        <small>Chargement en cours</small>
       </div>
-      <small>Chargement en cours</small>
     </div>
   );
 }
