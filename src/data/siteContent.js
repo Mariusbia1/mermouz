@@ -42,6 +42,20 @@ export const defaultSiteContent = {
       "Mon rêve est de bâtir des produits qui dépassent les frontières, de créer un jour une entreprise reconnue pour ses solutions et d’aider d’autres jeunes à croire en leur potentiel.",
     personality:
       "Je progresse avec curiosité, patience et persévérance. J’accorde beaucoup de valeur à la parole donnée, au respect des autres et au sentiment d’avoir fait les choses correctement.",
+    methodIntro:
+      "Je garde une méthode simple et transparente pour que vous sachiez toujours où en est votre projet et pourquoi chaque décision est prise.",
+    methodDiscoveryTitle: "Comprendre votre réalité",
+    methodDiscoveryText:
+      "Nous échangeons sur votre activité, votre public, vos difficultés et le résultat que vous voulez obtenir.",
+    methodDirectionTitle: "Définir une direction claire",
+    methodDirectionText:
+      "Je transforme nos échanges en une proposition structurée avec les priorités, les contenus et le parcours à construire.",
+    methodCreationTitle: "Créer et vous faire participer",
+    methodCreationText:
+      "Je conçois la solution par étapes et je vous présente régulièrement l’avancement afin de recueillir vos retours.",
+    methodDeliveryTitle: "Tester, livrer et accompagner",
+    methodDeliveryText:
+      "Je vérifie le fonctionnement sur chaque écran, je mets le projet en ligne et je reste disponible pour sa prise en main.",
   },
   cv: {
     introduction:

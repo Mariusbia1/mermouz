@@ -2,9 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
+  CheckCircle2,
+  Code2,
   Compass,
   Heart,
   MapPin,
+  MessagesSquare,
+  PenTool,
   Rocket,
   UserRound,
 } from "lucide-react";
@@ -92,6 +96,47 @@ export default function About() {
             <h3>Avancer avec exigence et sincérité</h3>
             <p>{content.about.personality}</p>
           </article>
+        </div>
+      </section>
+
+      <section className="about-method">
+        <header className="about-method-head">
+          <span>MA MÉTHODE DE TRAVAIL</span>
+          <h2>Une collaboration claire, du premier échange à la livraison.</h2>
+          <p>{content.about.methodIntro}</p>
+        </header>
+        <div className="about-method-grid">
+          <article>
+            <MessagesSquare />
+            <h3>{content.about.methodDiscoveryTitle}</h3>
+            <p>{content.about.methodDiscoveryText}</p>
+          </article>
+          <article>
+            <PenTool />
+            <h3>{content.about.methodDirectionTitle}</h3>
+            <p>{content.about.methodDirectionText}</p>
+          </article>
+          <article>
+            <Code2 />
+            <h3>{content.about.methodCreationTitle}</h3>
+            <p>{content.about.methodCreationText}</p>
+          </article>
+          <article>
+            <CheckCircle2 />
+            <h3>{content.about.methodDeliveryTitle}</h3>
+            <p>{content.about.methodDeliveryText}</p>
+          </article>
+        </div>
+        <div className="about-method-action">
+          <p>
+            Vous avez une idée en tête ? Commençons par en parler simplement.
+          </p>
+          <Link className="neo-primary" to="/contact">
+            Présenter mon projet
+            <span>
+              <ArrowRight />
+            </span>
+          </Link>
         </div>
       </section>
 
