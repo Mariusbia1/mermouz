@@ -160,6 +160,10 @@ export async function getSiteContent() {
     profile: {
       ...defaultSiteContent.profile,
       ...stored.profile,
+      fullName:
+        stored.profile?.fullName === "BIAOU Marius"
+          ? "Marius BIAOU"
+          : stored.profile?.fullName || defaultSiteContent.profile.fullName,
       photoUrl:
         stored.profile?.photoUrl === "/marius-navy-portrait.png"
           ? "/marius-navy-portrait-optimized.jpg"

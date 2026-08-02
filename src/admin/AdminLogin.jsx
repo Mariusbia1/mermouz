@@ -41,7 +41,7 @@ export default function AdminLogin() {
       <div className="admin-login-grid" />
       <section className="admin-login-intro">
         <a href="/" className="admin-login-brand">
-          mermouz<em>.</em>
+          Marius BIAOU<em>.</em>
         </a>
         <div>
           <span>ESPACE PRIVÉ</span>

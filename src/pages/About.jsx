@@ -23,8 +23,7 @@ export default function About() {
       <section className="about-hero">
         <div className="about-story">
           <span className="about-kicker">
-            {content.profile.fullName.toUpperCase()}, ALIAS{" "}
-            {content.profile.alias.toUpperCase()}
+            {content.profile.fullName.toUpperCase()}
           </span>
           <h1>
             <span>{content.about.title}</span>

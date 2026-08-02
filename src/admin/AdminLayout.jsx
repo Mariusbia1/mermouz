@@ -39,7 +39,7 @@ export default function AdminLayout() {
       <aside className={`admin-sidebar ${open ? "open" : ""}`}>
         <div className="admin-brand">
           <span>
-            mermouz<em>.</em>
+            Marius BIAOU<em>.</em>
           </span>
           <small>Administration</small>
         </div>

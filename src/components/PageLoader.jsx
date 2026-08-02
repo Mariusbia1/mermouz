@@ -11,7 +11,7 @@ export default function PageLoader() {
         <span className="loader-ring" />
         <span className="loader-ring loader-ring-inner" />
         <strong>
-          mermouz<em>.</em>
+          Marius BIAOU<em>.</em>
         </strong>
       </div>
       <small>Chargement en cours</small>

@@ -136,15 +136,6 @@ export default function ContentAdmin() {
                   }
                 />
               </label>
-              <label>
-                Alias
-                <input
-                  value={content.profile.alias}
-                  onChange={(e) =>
-                    setSection("profile", "alias", e.target.value)
-                  }
-                />
-              </label>
             </div>
             <label>
               Localisation

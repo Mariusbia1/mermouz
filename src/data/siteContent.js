@@ -1,7 +1,6 @@
 export const defaultSiteContent = {
   profile: {
-    fullName: "BIAOU Marius",
-    alias: "Mermouz",
+    fullName: "Marius BIAOU",
     location: "Abomey-Calavi, Bénin",
     job: "Développeur web chez OLRAF SARL et freelance",
     email: "mariusbiaou75@gmail.com",
@@ -33,7 +32,7 @@ export const defaultSiteContent = {
     story2:
       "Les stages, les projets et le travail en freelance m’ont appris la rigueur, l’écoute et l’importance des détails.",
     story3:
-      "Derrière Mermouz, il y a surtout une personne curieuse, calme et ambitieuse, qui aime apprendre, comprendre les autres et donner une forme concrète aux idées.",
+      "Derrière mon parcours, il y a surtout une personne curieuse, calme et ambitieuse, qui aime apprendre, comprendre les autres et donner une forme concrète aux idées.",
     passion:
       "Je suis passionné par la création. J’aime partir d’une idée encore floue, explorer ses possibilités puis la voir devenir quelque chose de réel, d’utile et dont on peut être fier.",
     vision:

@@ -14,10 +14,7 @@ export default function Home() {
           <div className="neo-intro">
             <span>Disponible pour de nouveaux projets</span>
           </div>
-          <p className="neo-name">
-            {content.profile.fullName.toUpperCase()}{" "}
-            <em>/ {content.profile.alias.toUpperCase()}</em>
-          </p>
+          <p className="neo-name">{content.profile.fullName.toUpperCase()}</p>
           <h1>
             {content.home.titleLine1}
             <br />

@@ -6999,13 +6999,15 @@ textarea {
   .nav-inner {
     width: 90%;
     height: 72px;
+    grid-template-columns: minmax(0, 1fr) auto;
     position: relative;
     z-index: 70;
   }
   .nav-inner > .brand {
     position: relative;
     z-index: 72;
-    font-size: 1.65rem;
+    font-size: clamp(1.05rem, 5vw, 1.4rem);
+    white-space: nowrap;
   }
   .mobile-menu {
     position: relative;

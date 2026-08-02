@@ -41,7 +41,7 @@ export default function Layout() {
       <header className="site-nav">
         <div className="nav-inner">
           <Link className="brand" to="/">
-            mermouz<em>.</em>
+            Marius BIAOU<em>.</em>
           </Link>
           <nav className={open ? "open" : ""}>
             {[
@@ -74,7 +74,7 @@ export default function Layout() {
       <footer className="site-footer">
         <div className="footer-inner">
           <Link className="brand" to="/">
-            mermouz<em>.</em>
+            Marius BIAOU<em>.</em>
           </Link>
           <span>
             {content.profile.fullName} · {content.profile.location}
