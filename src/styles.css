@@ -58,8 +58,11 @@
   width: min(100%, 1500px);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.2rem;
+}
+.projects-page .testimonials-section {
+  margin: 8rem -7vw -9rem;
 }
 .testimonial-card {
   min-height: 390px;
@@ -400,11 +403,17 @@
 }
 
 @media (max-width: 1000px) {
+  .testimonials-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .admin-testimonial-grid {
     grid-template-columns: 1fr;
   }
 }
 @media (max-width: 800px) {
+  .projects-page .testimonials-section {
+    margin: 6rem -7vw -9rem;
+  }
   .testimonials-section {
     padding: 5rem 5vw 6rem;
     overflow: hidden;

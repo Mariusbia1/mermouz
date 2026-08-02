@@ -3,6 +3,7 @@ import { ArrowUpRight, Blocks, ShoppingBag, Workflow } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
 import { getProjects } from "../lib/portfolioApi";
+import TestimonialsSection from "../components/TestimonialsSection";
 
 const projects = [
   {
@@ -150,6 +151,7 @@ export default function Works() {
           ),
         )}
       </section>
+      <TestimonialsSection />
     </motion.main>
   );
 }
