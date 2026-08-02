@@ -131,7 +131,7 @@ export default function About() {
             Vous avez une idée en tête ? Commençons par en parler simplement.
           </p>
           <Link className="neo-primary" to="/contact">
-            Présenter mon projet
+            Parlons de votre projet
             <span>
               <ArrowRight />
             </span>

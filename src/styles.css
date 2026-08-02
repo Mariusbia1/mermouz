@@ -7125,3 +7125,104 @@ textarea {
     margin-bottom: 1.8rem;
   }
 }
+
+/* Finition mobile de la page À propos */
+@media (max-width: 800px) {
+  .about-page {
+    padding-right: 5vw;
+    padding-left: 5vw;
+    padding-bottom: 5rem;
+  }
+  .about-hero {
+    gap: 3rem;
+  }
+  .about-kicker {
+    display: block;
+    font-size: 0.62rem;
+    line-height: 1.5;
+  }
+  .about-story h1 {
+    margin: 1rem 0 1.5rem;
+    font-size: clamp(2.35rem, 11vw, 3.5rem);
+    line-height: 0.98;
+  }
+  .about-story > p,
+  .about-story .about-opening {
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+  .about-actions {
+    width: 100%;
+    gap: 1.2rem;
+  }
+  .about-actions .neo-primary,
+  .about-method-action .neo-primary {
+    width: 100%;
+    min-height: 62px;
+    padding: 0.45rem 0.45rem 0.45rem 1.25rem;
+    justify-content: space-between;
+    font-size: 0.67rem;
+  }
+  .about-actions .neo-primary > span,
+  .about-method-action .neo-primary > span {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+  }
+  .about-photo-wrap {
+    width: 100%;
+    height: min(125vw, 560px);
+  }
+  .about-photo-wrap:before {
+    inset: 10px -8px -10px 8px;
+  }
+  .about-photo {
+    background-position: center top;
+  }
+  .about-photo-caption {
+    right: 1rem;
+    bottom: 1.25rem;
+    left: 1rem;
+    max-width: none;
+  }
+  .about-now,
+  .about-method,
+  .about-values {
+    margin-top: 4.5rem;
+  }
+  .about-now-head,
+  .about-method-head {
+    margin-bottom: 2.5rem;
+  }
+  .about-now-head h2,
+  .about-method-head h2,
+  .about-values-head h2 {
+    font-size: clamp(1.9rem, 8.5vw, 2.6rem);
+    line-height: 1.08;
+  }
+  .about-now-grid article,
+  .about-method-grid article,
+  .about-value-grid article {
+    padding: 1.5rem;
+  }
+  .about-now-grid svg,
+  .about-method-grid svg {
+    width: 28px;
+    height: 28px;
+  }
+  .about-method-action > p {
+    line-height: 1.55;
+    text-align: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .about-story h1 {
+    font-size: 10.5vw;
+  }
+  .about-actions .neo-primary,
+  .about-method-action .neo-primary {
+    font-size: 0.61rem;
+    letter-spacing: 0.045em;
+  }
+}
