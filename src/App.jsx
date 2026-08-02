@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import PageLoader from "./components/PageLoader";
+import Seo from "./components/Seo";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -24,6 +25,7 @@ const SettingsAdmin = lazy(() => import("./admin/pages/SettingsAdmin"));
 export default function App() {
   return (
     <BrowserRouter>
+      <Seo />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route element={<Layout />}>

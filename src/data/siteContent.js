@@ -26,7 +26,7 @@ export const defaultSiteContent = {
     title: "J’aime transformer une idée",
     accent: "en solution qui compte.",
     opening:
-      "Mon parcours a commencé par une curiosité simple : comprendre comment les outils numériques fonctionnent et comment ils peuvent résoudre de vrais problèmes.",
+      "Je m’appelle Marius BIAOU. Je suis développeur web et j’aime imaginer puis créer des sites internet et des solutions numériques qui rendent une idée concrète, visible et utile.",
     story1:
       "À Parakou, pendant ma licence en Informatique de gestion, j’ai appris à relier la technologie et les besoins d’une entreprise.",
     story2:

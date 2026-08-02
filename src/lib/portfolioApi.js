@@ -150,6 +150,14 @@ export async function getSiteContent() {
   if (error) throw error;
   const stored = data?.value || {};
   const storedAbout = { ...(stored.about || {}) };
+  if (
+    storedAbout.opening?.startsWith(
+      "Mon parcours a commencé par une curiosité simple",
+    ) ||
+    storedAbout.opening?.includes("installé à Abomey-Calavi au Bénin")
+  ) {
+    storedAbout.opening = defaultSiteContent.about.opening;
+  }
   delete storedAbout.currentRole;
   delete storedAbout.freelance;
   delete storedAbout.approach;
