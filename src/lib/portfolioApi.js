@@ -149,6 +149,11 @@ export async function getSiteContent() {
     .maybeSingle();
   if (error) throw error;
   const stored = data?.value || {};
+  const storedAbout = { ...(stored.about || {}) };
+  delete storedAbout.currentRole;
+  delete storedAbout.freelance;
+  delete storedAbout.approach;
+  delete storedAbout.ambition;
   return {
     ...defaultSiteContent,
     ...stored,
@@ -162,7 +167,7 @@ export async function getSiteContent() {
     },
     social: { ...defaultSiteContent.social, ...stored.social },
     home: { ...defaultSiteContent.home, ...stored.home },
-    about: { ...defaultSiteContent.about, ...stored.about },
+    about: { ...defaultSiteContent.about, ...storedAbout },
     cv: {
       ...defaultSiteContent.cv,
       ...stored.cv,

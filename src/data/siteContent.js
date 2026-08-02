@@ -33,15 +33,15 @@ export const defaultSiteContent = {
     story2:
       "Les stages, les projets et le travail en freelance m’ont appris la rigueur, l’écoute et l’importance des détails.",
     story3:
-      "Aujourd’hui, je travaille comme développeur web chez OLRAF SARL à Abomey-Calavi, tout en accompagnant des entrepreneurs et des entreprises en freelance.",
-    currentRole:
-      "Chez OLRAF SARL, je participe à la création et à l’amélioration de solutions numériques pensées pour répondre à des besoins concrets.",
-    freelance:
-      "En freelance, j’aide mes clients à transformer une idée en un site, une boutique ou un outil en ligne clair, professionnel et facile à utiliser.",
-    approach:
-      "Je prends le temps de comprendre l’activité, les objectifs et les utilisateurs avant de concevoir. Je privilégie une communication simple, un travail soigné et des choix utiles.",
-    ambition:
-      "Mon objectif est de construire des solutions qui renforcent la crédibilité d’une activité, facilitent le travail quotidien et créent de vraies opportunités.",
+      "Derrière Mermouz, il y a surtout une personne curieuse, calme et ambitieuse, qui aime apprendre, comprendre les autres et donner une forme concrète aux idées.",
+    passion:
+      "Je suis passionné par la création. J’aime partir d’une idée encore floue, explorer ses possibilités puis la voir devenir quelque chose de réel, d’utile et dont on peut être fier.",
+    vision:
+      "Je crois que le numérique peut ouvrir des portes, rapprocher les personnes et donner à une bonne idée la visibilité qu’elle mérite, notamment en Afrique.",
+    dream:
+      "Mon rêve est de bâtir des produits qui dépassent les frontières, de créer un jour une entreprise reconnue pour ses solutions et d’aider d’autres jeunes à croire en leur potentiel.",
+    personality:
+      "Je progresse avec curiosité, patience et persévérance. J’accorde beaucoup de valeur à la parole donnée, au respect des autres et au sentiment d’avoir fait les choses correctement.",
   },
   cv: {
     introduction:

@@ -40,15 +40,16 @@ export default function Contact() {
       <header className="page-head">
         <span>CONTACT</span>
         <h1>
-          Construisons quelque
+          Donnons vie à votre
           <br />
-          <em>chose de solide.</em>
+          <em>projet numérique.</em>
         </h1>
       </header>
       <section className="contact-grid">
         <div>
           <p>
-            Un projet, une idée ou un problème à résoudre ? Écrivez-moi. Je
+            Vous souhaitez créer un site, une boutique en ligne ou une solution
+            numérique pour votre activité ? Expliquez-moi votre idée. Je vous
             réponds généralement sous 24 heures.
           </p>
           <a href={`mailto:${content.profile.email}`}>
@@ -88,7 +89,7 @@ export default function Contact() {
             />
           </label>
           <label>
-            PARLEZ-MOI DU PROJET
+            PARLEZ-MOI DE VOTRE PROJET NUMÉRIQUE
             <textarea
               name="message"
               required

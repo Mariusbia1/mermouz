@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { FaFacebookF, FaGithub, FaWhatsapp } from "react-icons/fa6";
+import {
+  FaFacebookF,
+  FaGithub,
+  FaLinkedinIn,
+  FaWhatsapp,
+} from "react-icons/fa6";
 import { recordVisit } from "../lib/portfolioApi";
 import { useSiteContent } from "../hooks/useSiteContent";
 
@@ -93,6 +98,16 @@ export default function Layout() {
                 aria-label="Facebook"
               >
                 <FaFacebookF />
+              </a>
+            )}
+            {content.social.linkedin && (
+              <a
+                href={content.social.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedinIn />
               </a>
             )}
             {content.social.whatsapp && (

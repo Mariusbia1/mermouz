@@ -2,11 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
-  BriefcaseBusiness,
-  GraduationCap,
+  Compass,
+  Heart,
   MapPin,
-  MonitorSmartphone,
-  Users,
+  Rocket,
+  UserRound,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
@@ -60,74 +60,73 @@ export default function About() {
 
       <section className="about-now">
         <header className="about-now-head">
-          <span>QUI JE SUIS AUJOURD’HUI</span>
-          <h2>Un développeur impliqué dans chaque projet.</h2>
+          <span>AU-DELÀ DU MÉTIER</span>
+          <h2>Ce qui m’anime et ce que je veux construire.</h2>
           <p>
-            Mon travail ne consiste pas seulement à écrire du code. Je cherche à
-            comprendre ce que votre activité doit améliorer et à construire une
-            réponse claire, fiable et durable.
+            Me découvrir, c’est comprendre ce qui nourrit ma curiosité, les
+            valeurs qui orientent mes choix et l’avenir que j’ai envie de bâtir.
           </p>
         </header>
         <div className="about-now-grid">
           <article>
-            <BriefcaseBusiness />
-            <span>MON ACTIVITÉ ACTUELLE</span>
-            <h3>Développeur chez OLRAF SARL</h3>
-            <p>{content.about.currentRole}</p>
+            <Heart />
+            <span>MA PASSION</span>
+            <h3>Donner vie aux idées</h3>
+            <p>{content.about.passion}</p>
           </article>
           <article>
-            <Users />
-            <span>ACCOMPAGNEMENT</span>
-            <h3>Freelance auprès des entrepreneurs</h3>
-            <p>{content.about.freelance}</p>
-          </article>
-          <article>
-            <GraduationCap />
-            <span>MON PROFIL</span>
-            <h3>Informatique et vision d’entreprise</h3>
-            <p>{content.about.approach}</p>
-          </article>
-          <article>
-            <MonitorSmartphone />
+            <Compass />
             <span>MA VISION</span>
-            <h3>Créer une solution qui sert vraiment</h3>
-            <p>{content.about.ambition}</p>
+            <h3>Créer des possibilités</h3>
+            <p>{content.about.vision}</p>
+          </article>
+          <article>
+            <Rocket />
+            <span>MON RÊVE</span>
+            <h3>Construire au-delà des frontières</h3>
+            <p>{content.about.dream}</p>
+          </article>
+          <article>
+            <UserRound />
+            <span>MA PERSONNALITÉ</span>
+            <h3>Avancer avec exigence et sincérité</h3>
+            <p>{content.about.personality}</p>
           </article>
         </div>
       </section>
 
       <section className="about-values">
         <div className="about-values-head">
-          <span>CE QUI GUIDE MON TRAVAIL</span>
-          <h2>Créer avec méthode et rester proche du besoin.</h2>
+          <span>CE QUI ME DÉFINIT</span>
+          <h2>Des valeurs simples que j’essaie de vivre chaque jour.</h2>
         </div>
         <div className="about-value-grid">
           <article>
-            <span>Comprendre</span>
+            <span>Curiosité</span>
             <p>
-              Je commence par écouter votre réalité, vos contraintes et ce que
-              vous voulez améliorer.
+              J’aime poser des questions, découvrir de nouvelles idées et ne
+              jamais considérer que j’ai fini d’apprendre.
             </p>
           </article>
           <article>
-            <span>Simplifier</span>
+            <span>Persévérance</span>
             <p>
-              Je rends les idées complexes faciles à comprendre et les
-              interfaces agréables à utiliser.
+              Une difficulté n’est pas une raison d’abandonner. Je cherche,
+              j’essaie et je progresse jusqu’à trouver une voie.
             </p>
           </article>
           <article>
-            <span>Soigner</span>
+            <span>Ambition</span>
             <p>
-              Je porte attention à la qualité visuelle, à la rapidité et au bon
-              fonctionnement de chaque détail.
+              Je veux construire des choses importantes sans oublier que les
+              grands parcours commencent souvent par de petites étapes.
             </p>
           </article>
           <article>
-            <span>Accompagner</span>
+            <span>Respect</span>
             <p>
-              Je communique clairement et je reste disponible pendant et après
-              la réalisation du projet.
+              J’accorde de l’importance à l’écoute, à l’honnêteté et aux
+              relations dans lesquelles chacun se sent considéré.
             </p>
           </article>
         </div>
