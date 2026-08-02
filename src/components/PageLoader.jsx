@@ -1,7 +1,8 @@
 import React from "react";
+import { createPortal } from "react-dom";
 
 export default function PageLoader() {
-  return (
+  const loader = (
     <div
       className="site-loader is-visible"
       role="status"
@@ -20,4 +21,6 @@ export default function PageLoader() {
       </div>
     </div>
   );
+
+  return createPortal(loader, document.body);
 }

@@ -106,8 +106,9 @@ export async function saveProject(project) {
   const query = id
     ? supabase.from("projects").update(values).eq("id", id)
     : supabase.from("projects").insert(values);
-  const { error } = await query;
+  const { data, error } = await query.select().single();
   if (error) throw error;
+  return data;
 }
 
 export async function deleteProject(id) {
@@ -215,14 +216,61 @@ export async function uploadProfilePhoto(file) {
 }
 
 export async function uploadProjectScreenshot(file) {
-  const extension = file.name.split(".").pop() || "jpg";
+  if (!file?.type?.startsWith("image/")) {
+    throw new Error("Le fichier sélectionné doit être une image.");
+  }
+  if (file.size > 15 * 1024 * 1024) {
+    throw new Error("La capture ne doit pas dépasser 15 Mo.");
+  }
+  const optimizedFile = await optimizeImageForUpload(file);
+  const extension = optimizedFile.name.split(".").pop() || "webp";
   const path = `projects/project-${Date.now()}.${extension}`;
   const { error } = await supabase.storage
     .from("portfolio-media")
-    .upload(path, file, { upsert: true });
+    .upload(path, optimizedFile, {
+      upsert: true,
+      contentType: optimizedFile.type,
+      cacheControl: "31536000",
+    });
   if (error) throw error;
   return supabase.storage.from("portfolio-media").getPublicUrl(path).data
     .publicUrl;
+}
+
+async function optimizeImageForUpload(file) {
+  if (file.type === "image/svg+xml" || file.size < 450 * 1024) return file;
+
+  const imageUrl = URL.createObjectURL(file);
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const element = new Image();
+      element.onload = () => resolve(element);
+      element.onerror = () => reject(new Error("Cette image est illisible."));
+      element.src = imageUrl;
+    });
+    const maxWidth = 1800;
+    const maxHeight = 1400;
+    const ratio = Math.min(
+      1,
+      maxWidth / image.naturalWidth,
+      maxHeight / image.naturalHeight,
+    );
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * ratio));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * ratio));
+    const context = canvas.getContext("2d", { alpha: false });
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise((resolve) =>
+      canvas.toBlob(resolve, "image/webp", 0.84),
+    );
+    if (!blob) return file;
+    const baseName = file.name.replace(/\.[^.]+$/, "") || "capture-projet";
+    return new File([blob], `${baseName}.webp`, { type: "image/webp" });
+  } finally {
+    URL.revokeObjectURL(imageUrl);
+  }
 }
 
 export async function getTestimonials({ publishedOnly = false } = {}) {

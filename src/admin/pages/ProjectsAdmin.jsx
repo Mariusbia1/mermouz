@@ -28,6 +28,9 @@ export default function ProjectsAdmin() {
   const [editing, setEditing] = useState(null);
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
+  const [formError, setFormError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [preview, setPreview] = useState("");
 
   async function load() {
     try {
@@ -42,9 +45,19 @@ export default function ProjectsAdmin() {
 
   async function submit(event) {
     event.preventDefault();
+    if (saving) return;
+    setSaving(true);
+    setFormError("");
     const form = new FormData(event.currentTarget);
-    const title = String(form.get("title"));
+    const title = String(form.get("title") || "").trim();
+    const summary = String(form.get("summary") || "").trim();
     try {
+      if (title.length < 3) {
+        throw new Error("Le titre doit contenir au moins 3 caractères.");
+      }
+      if (summary.length < 20) {
+        throw new Error("Ajoutez une description d’au moins 20 caractères.");
+      }
       const screenshot = form.get("screenshot");
       let imageUrl = editing?.image_url || null;
       if (screenshot instanceof File && screenshot.size > 0) {
@@ -53,23 +66,53 @@ export default function ProjectsAdmin() {
       await saveProject({
         id: editing?.id,
         title,
-        slug:
-          editing?.slug ||
-          `${slugify(title)}-${Date.now().toString().slice(-5)}`,
+        slug: editing?.slug || `${slugify(title)}-${Date.now()}`,
         category: String(form.get("category")),
-        summary: String(form.get("summary")),
+        summary,
         image_url: imageUrl,
         project_url: String(form.get("project_url")) || null,
         status: String(form.get("status")),
       });
       setEditing(null);
+      setPreview("");
+      setError("");
       await load();
     } catch (requestError) {
-      setError(
-        requestError?.message ||
-          "L’enregistrement du projet a échoué. Vérifiez le stockage Supabase.",
+      const message =
+        requestError?.message || "L’enregistrement du projet a échoué.";
+      setFormError(
+        message.includes("row-level security")
+          ? "Votre session n’autorise pas cet enregistrement. Reconnectez-vous au dashboard puis réessayez."
+          : message.includes("Bucket not found")
+            ? "Le stockage portfolio-media est introuvable. Exécutez le script storage-fix.sql dans Supabase."
+            : message,
       );
+    } finally {
+      setSaving(false);
     }
+  }
+
+  function openForm(project) {
+    setFormError("");
+    setPreview(project.image_url || "");
+    setEditing(project);
+  }
+
+  function selectScreenshot(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setFormError("Le fichier sélectionné doit être une image.");
+      event.target.value = "";
+      return;
+    }
+    if (file.size > 15 * 1024 * 1024) {
+      setFormError("La capture ne doit pas dépasser 15 Mo.");
+      event.target.value = "";
+      return;
+    }
+    setFormError("");
+    setPreview(URL.createObjectURL(file));
   }
 
   async function remove(id) {
@@ -93,7 +136,7 @@ export default function ProjectsAdmin() {
           <h1>Vos réalisations</h1>
           <p>Les modifications sont directement publiées depuis Supabase.</p>
         </div>
-        <button onClick={() => setEditing(emptyProject)}>
+        <button onClick={() => openForm(emptyProject)}>
           <Plus /> Nouveau projet
         </button>
       </header>
@@ -133,7 +176,7 @@ export default function ProjectsAdmin() {
               </i>
             </div>
             <div className="admin-row-actions">
-              <button title="Modifier" onClick={() => setEditing(project)}>
+              <button title="Modifier" onClick={() => openForm(project)}>
                 <Edit3 />
               </button>
               <button title="Supprimer" onClick={() => remove(project.id)}>
@@ -155,7 +198,13 @@ export default function ProjectsAdmin() {
                     : "Ajouter une réalisation"}
                 </h2>
               </div>
-              <button type="button" onClick={() => setEditing(null)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditing(null);
+                  setPreview("");
+                }}
+              >
                 <X />
               </button>
             </div>
@@ -193,17 +242,18 @@ export default function ProjectsAdmin() {
                 name="screenshot"
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
+                onChange={selectScreenshot}
               />
               <small className="admin-field-help">
                 Une seule capture suffit pour générer les aperçus ordinateur,
                 tablette et mobile.
               </small>
             </label>
-            {editing.image_url && (
+            {preview && (
               <img
                 className="admin-project-image-preview"
-                src={editing.image_url}
-                alt="Aperçu actuel"
+                src={preview}
+                alt="Aperçu de la capture"
               />
             )}
             <label>
@@ -221,7 +271,14 @@ export default function ProjectsAdmin() {
                 <option value="draft">Brouillon</option>
               </select>
             </label>
-            <button className="admin-form-submit">Enregistrer le projet</button>
+            {formError && (
+              <p className="admin-form-error" role="alert">
+                {formError}
+              </p>
+            )}
+            <button className="admin-form-submit" disabled={saving}>
+              {saving ? "Enregistrement en cours" : "Enregistrer le projet"}
+            </button>
           </form>
         </div>
       )}

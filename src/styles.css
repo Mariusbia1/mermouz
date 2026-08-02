@@ -6312,10 +6312,44 @@ textarea {
   }
 }
 
+.admin-form-error {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(216, 120, 120, 0.3);
+  border-left: 3px solid #d87878;
+  border-radius: 6px;
+  background: rgba(216, 120, 120, 0.08);
+  color: #e1aaaa;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+.admin-form-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 /* Chargement sobre et en-tête Contact */
 .site-loader {
+  width: 100vw;
+  min-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: #080d13 !important;
   background-image: none !important;
+  opacity: 1 !important;
+  isolation: isolate;
+  overflow: hidden;
+  mix-blend-mode: normal;
+  box-shadow: 0 0 0 100vmax #080d13;
+}
+.site-loader:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -2px;
+  background: #080d13;
 }
 .loader-mark {
   width: 126px;
