@@ -1,5 +1,6 @@
 import { isSupabaseConfigured, supabase } from "./supabase";
 import { defaultSiteContent } from "../data/siteContent";
+import { defaultTestimonials } from "../data/testimonials";
 
 const VISITOR_KEY = "mermouz_visitor_id";
 const LOCAL_VISITS_KEY = "mermouz_local_visitors";
@@ -199,6 +200,49 @@ export async function uploadProfilePhoto(file) {
 export async function uploadProjectScreenshot(file) {
   const extension = file.name.split(".").pop() || "jpg";
   const path = `projects/project-${Date.now()}.${extension}`;
+  const { error } = await supabase.storage
+    .from("portfolio-media")
+    .upload(path, file, { upsert: true });
+  if (error) throw error;
+  return supabase.storage.from("portfolio-media").getPublicUrl(path).data
+    .publicUrl;
+}
+
+export async function getTestimonials({ publishedOnly = false } = {}) {
+  if (!isSupabaseConfigured) {
+    return defaultTestimonials.filter(
+      (item) => !publishedOnly || item.is_published,
+    );
+  }
+  let query = supabase
+    .from("testimonials")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (publishedOnly) query = query.eq("is_published", true);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
+}
+
+export async function saveTestimonial(testimonial) {
+  const { id, ...values } = testimonial;
+  const query =
+    id && !String(id).startsWith("demo-")
+      ? supabase.from("testimonials").update(values).eq("id", id)
+      : supabase.from("testimonials").insert(values);
+  const { error } = await query;
+  if (error) throw error;
+}
+
+export async function deleteTestimonial(id) {
+  const { error } = await supabase.from("testimonials").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export async function uploadTestimonialScreenshot(file) {
+  const extension = file.name.split(".").pop() || "jpg";
+  const path = `testimonials/review-${Date.now()}.${extension}`;
   const { error } = await supabase.storage
     .from("portfolio-media")
     .upload(path, file, { upsert: true });

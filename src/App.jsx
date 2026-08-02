@@ -17,6 +17,7 @@ const Overview = lazy(() => import("./admin/pages/Overview"));
 const ProjectsAdmin = lazy(() => import("./admin/pages/ProjectsAdmin"));
 const ServicesAdmin = lazy(() => import("./admin/pages/ServicesAdmin"));
 const RequestsAdmin = lazy(() => import("./admin/pages/RequestsAdmin"));
+const TestimonialsAdmin = lazy(() => import("./admin/pages/TestimonialsAdmin"));
 const ContentAdmin = lazy(() => import("./admin/pages/ContentAdmin"));
 const SettingsAdmin = lazy(() => import("./admin/pages/SettingsAdmin"));
 
@@ -41,6 +42,7 @@ export default function App() {
               <Route path="projects" element={<ProjectsAdmin />} />
               <Route path="services" element={<ServicesAdmin />} />
               <Route path="requests" element={<RequestsAdmin />} />
+              <Route path="testimonials" element={<TestimonialsAdmin />} />
               <Route path="content" element={<ContentAdmin />} />
               <Route path="settings" element={<SettingsAdmin />} />
             </Route>

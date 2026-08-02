@@ -9,6 +9,7 @@ import {
   Menu,
   MessageSquareText,
   Settings,
+  Star,
   Wrench,
   X,
 } from "lucide-react";
@@ -19,6 +20,7 @@ const navigation = [
   { to: "/admin/projects", label: "Projets", icon: BriefcaseBusiness },
   { to: "/admin/services", label: "Services", icon: Wrench },
   { to: "/admin/requests", label: "Demandes", icon: MessageSquareText },
+  { to: "/admin/testimonials", label: "Témoignages", icon: Star },
   { to: "/admin/content", label: "Contenus", icon: FileText },
   { to: "/admin/settings", label: "Paramètres", icon: Settings },
 ];

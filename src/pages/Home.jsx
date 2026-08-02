@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
 import { useSiteContent } from "../hooks/useSiteContent";
+import TestimonialsSection from "../components/TestimonialsSection";
 
 export default function Home() {
   const content = useSiteContent();
@@ -66,6 +67,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <TestimonialsSection />
     </motion.main>
   );
 }
