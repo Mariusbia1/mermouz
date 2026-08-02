@@ -101,23 +101,6 @@ export default function Works() {
                         decoding="async"
                       />
                     </div>
-                    <div className="device tablet">
-                      <img
-                        src={image_url}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                    <div className="device mobile">
-                      <span />
-                      <img
-                        src={image_url}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
                   </div>
                 ) : (
                   <div className="project-window">
