@@ -7802,3 +7802,71 @@ textarea {
     inset: 10px -6px -10px 8px;
   }
 }
+
+/* Header mobile sans chevauchement des zones tactiles */
+@media (max-width: 800px) {
+  .nav-inner {
+    grid-template-columns: minmax(0, 1fr) 40px 40px;
+    gap: 0.55rem;
+  }
+
+  .nav-inner > .brand {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: clamp(0.98rem, 4.6vw, 1.28rem);
+    text-overflow: ellipsis;
+  }
+
+  .nav-actions {
+    position: static;
+    right: auto;
+    width: 40px;
+    justify-self: auto;
+  }
+
+  .theme-toggle,
+  .mobile-menu {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    padding: 0;
+    place-items: center;
+    z-index: 74;
+  }
+
+  .mobile-menu {
+    display: grid;
+    justify-self: end;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .mobile-menu svg,
+  .theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-inner {
+    width: 94%;
+    grid-template-columns: minmax(0, 1fr) 36px 36px;
+    gap: 0.4rem;
+  }
+
+  .nav-actions,
+  .theme-toggle,
+  .mobile-menu {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+  }
+
+  .nav-inner > .brand {
+    font-size: 0.94rem;
+  }
+}

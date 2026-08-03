@@ -112,7 +112,13 @@ export default function Layout() {
               Me contacter <ArrowUpRight size={15} />
             </Link>
           </div>
-          <button className="mobile-menu" onClick={() => setOpen(!open)}>
+          <button
+            className="mobile-menu"
+            type="button"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={open}
+          >
             {open ? <X /> : <Menu />}
           </button>
         </div>
