@@ -575,6 +575,7 @@
     flex-direction: column;
   }
 }
+
 @media (max-width: 600px) {
   .admin-testimonial-grid article {
     grid-template-columns: 1fr;
@@ -7766,5 +7767,38 @@ textarea {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.65rem;
+  }
+}
+
+/* Cadre propre du portrait de la page À propos */
+.about-photo-wrap {
+  background: transparent !important;
+  isolation: isolate;
+}
+
+.about-photo-wrap:before {
+  z-index: -1;
+  inset: 16px -16px -16px 16px;
+  border-color: rgba(107, 157, 207, 0.28);
+  background: transparent;
+  clip-path: polygon(0 0, 88% 0, 100% 9%, 100% 100%, 0 100%);
+}
+
+.about-photo-wrap:after {
+  display: none;
+}
+
+.about-photo {
+  background-color: #0d1a29;
+  clip-path: polygon(0 0, 88% 0, 100% 9%, 100% 100%, 0 100%);
+}
+
+:root[data-theme="light"] .about-photo-wrap:before {
+  border-color: rgba(40, 93, 148, 0.3);
+}
+
+@media (max-width: 600px) {
+  .about-photo-wrap:before {
+    inset: 10px -6px -10px 8px;
   }
 }
