@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
 import {
   FaFacebookF,
   FaGithub,
@@ -10,10 +10,41 @@ import {
 import { recordVisit } from "../lib/portfolioApi";
 import { useSiteContent } from "../hooks/useSiteContent";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    const previousBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    document.documentElement.style.scrollBehavior = previousBehavior;
+  }, [pathname]);
+
+  return null;
+}
+
+function getInitialTheme() {
+  const savedTheme = localStorage.getItem("portfolio-theme");
+
+  if (savedTheme === "light" || savedTheme === "dark") {
+    return savedTheme;
+  }
+
+  return window.matchMedia("(prefers-color-scheme: light)").matches
+    ? "light"
+    : "dark";
+}
+
 export default function Layout() {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState(getInitialTheme);
   const location = useLocation();
   const content = useSiteContent();
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("portfolio-theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     recordVisit(location.pathname).catch(() => {
@@ -30,6 +61,7 @@ export default function Layout() {
 
   return (
     <>
+      <ScrollToTop />
       <div className="ambient">
         <i />
         <i />
@@ -62,9 +94,24 @@ export default function Layout() {
               Me contacter
             </NavLink>
           </nav>
-          <Link className="nav-contact" to="/contact">
-            Me contacter <ArrowUpRight size={15} />
-          </Link>
+          <div className="nav-actions">
+            <button
+              className="theme-toggle"
+              type="button"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              aria-label={
+                theme === "dark"
+                  ? "Activer le mode clair"
+                  : "Activer le mode sombre"
+              }
+              title={theme === "dark" ? "Mode clair" : "Mode sombre"}
+            >
+              {theme === "dark" ? <Sun /> : <Moon />}
+            </button>
+            <Link className="nav-contact" to="/contact">
+              Me contacter <ArrowUpRight size={15} />
+            </Link>
+          </div>
           <button className="mobile-menu" onClick={() => setOpen(!open)}>
             {open ? <X /> : <Menu />}
           </button>

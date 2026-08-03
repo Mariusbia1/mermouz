@@ -4,6 +4,15 @@ import "./styles.css";
 import "react-phone-number-input/style.css";
 
 const rootElement = document.getElementById("root");
+const savedTheme = localStorage.getItem("portfolio-theme");
+const initialTheme =
+  savedTheme === "light" || savedTheme === "dark"
+    ? savedTheme
+    : window.matchMedia("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark";
+
+document.documentElement.dataset.theme = initialTheme;
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -58,8 +67,7 @@ window.addEventListener("unhandledrejection", (event) =>
   showFatalError(event.reason),
 );
 
-rootElement.innerHTML =
-  '<div style="min-height:100vh;background:#0b0f14"></div>';
+rootElement.innerHTML = '<div class="app-boot-screen"></div>';
 
 import("./App.jsx")
   .then(({ default: App }) => {
