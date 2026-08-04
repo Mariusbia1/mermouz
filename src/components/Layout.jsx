@@ -174,7 +174,10 @@ export default function Layout() {
               </a>
             )}
           </div>
-          <small>© 2026. Tous droits réservés</small>
+          <small>
+            <span>© 2026. Tous droits réservés</span>
+            <Link to="/confidentialite">Confidentialité</Link>
+          </small>
         </div>
       </footer>
     </>

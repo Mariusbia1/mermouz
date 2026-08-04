@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import NotificationsMenu from "./NotificationsMenu";
 
 const navigation = [
   { to: "/admin", label: "Vue d’ensemble", icon: LayoutDashboard, end: true },
@@ -70,7 +71,10 @@ export default function AdminLayout() {
             <span>ESPACE ADMINISTRATEUR</span>
             <strong>BIAOU Marius</strong>
           </div>
-          <i>BM</i>
+          <div className="admin-topbar-actions">
+            <NotificationsMenu />
+            <i>BM</i>
+          </div>
         </header>
         <div className="admin-page">
           <Outlet />

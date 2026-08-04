@@ -11,6 +11,7 @@ const ServiceDetail = lazy(() => import("./pages/ServiceDetail"));
 const Works = lazy(() => import("./pages/Works"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Resume = lazy(() => import("./pages/Resume"));
+const Privacy = lazy(() => import("./pages/Privacy"));
 const AdminGuard = lazy(() => import("./admin/AdminGuard"));
 const AdminLayout = lazy(() => import("./admin/AdminLayout"));
 const AdminLogin = lazy(() => import("./admin/AdminLogin"));
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/works" element={<Works />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cv" element={<Resume />} />
+            <Route path="/confidentialite" element={<Privacy />} />
           </Route>
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route element={<AdminGuard />}>

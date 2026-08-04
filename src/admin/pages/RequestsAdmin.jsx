@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Check, Mail, MessageCircle, Search } from "lucide-react";
+import { Check, Download, Mail, MessageCircle, Search } from "lucide-react";
 import {
   getContactRequests,
   updateContactStatus,
 } from "../../lib/portfolioApi";
 import { portfolioServices } from "../../data/services";
+import { supabase } from "../../lib/supabase";
 
 const labels = {
   nouveau: "Nouveau",
@@ -28,6 +29,30 @@ export default function RequestsAdmin() {
       })
       .catch(() => setError("Impossible de charger les demandes."))
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-requests-page")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "contact_requests" },
+        () => {
+          getContactRequests().then((data) => {
+            setRequests(data);
+            setSelected((current) =>
+              current
+                ? data.find((item) => item.id === current.id) || data[0] || null
+                : data[0] || null,
+            );
+          });
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const filtered = useMemo(
@@ -54,6 +79,40 @@ export default function RequestsAdmin() {
     );
   }
 
+  function exportRequests() {
+    const columns = [
+      "Date",
+      "Nom",
+      "Email",
+      "WhatsApp",
+      "Service",
+      "Statut",
+      "Message",
+    ];
+    const escapeCell = (value) =>
+      `"${String(value ?? "").replaceAll('"', '""')}"`;
+    const rows = requests.map((item) => [
+      new Date(item.created_at).toLocaleString("fr-FR"),
+      item.name,
+      item.email,
+      item.whatsapp,
+      serviceName(item.service_slug),
+      labels[item.status] || item.status,
+      item.message,
+    ]);
+    const csv = [columns, ...rows]
+      .map((row) => row.map(escapeCell).join(";"))
+      .join("\n");
+    const url = URL.createObjectURL(
+      new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }),
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `demandes-portfolio-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <>
       <header className="admin-page-head">
@@ -62,6 +121,14 @@ export default function RequestsAdmin() {
           <h1>Messages reçus</h1>
           <p>Consultez et traitez les demandes envoyées depuis le portfolio.</p>
         </div>
+        <button
+          className="admin-export-button"
+          type="button"
+          onClick={exportRequests}
+          disabled={!requests.length}
+        >
+          <Download /> Exporter en CSV
+        </button>
       </header>
       <div className="admin-request-filters">
         {["Toutes", "Nouveau", "À traiter", "Répondu"].map((item) => (

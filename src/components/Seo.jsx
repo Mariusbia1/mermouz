@@ -2,22 +2,22 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const defaultDescription =
-  "Marius BIAOU crée des sites web et des solutions numériques pour les entreprises et entrepreneurs au Bénin : sites internet, boutiques en ligne et développement web.";
+  "Marius BIAOU crée des sites web et des solutions numériques pour les entreprises et entrepreneurs : sites internet, boutiques en ligne et développement web.";
 
 const pages = {
   "/": {
-    title: "Création de site web au Bénin | Marius BIAOU",
+    title: "Création de site web | Marius BIAOU",
     description: defaultDescription,
   },
   "/about": {
-    title: "À propos de Marius BIAOU | Développeur web au Bénin",
+    title: "À propos de Marius BIAOU | Développeur web",
     description:
-      "Découvrez Marius BIAOU, développeur web au Bénin : son parcours, sa passion, sa vision et sa méthode pour créer des sites internet utiles.",
+      "Découvrez Marius BIAOU, développeur web : son parcours, sa passion, sa vision et sa méthode pour créer des sites internet utiles.",
   },
   "/services": {
     title: "Création de site internet et développement web | Services",
     description:
-      "Création de sites web, sites WordPress et Wix, boutiques Shopify, tunnels de vente, solutions sur mesure et optimisation SEO au Bénin.",
+      "Création de sites web, sites WordPress et Wix, boutiques Shopify, tunnels de vente, solutions sur mesure et optimisation SEO.",
   },
   "/works": {
     title: "Projets de création de sites web | Marius BIAOU",
@@ -32,7 +32,12 @@ const pages = {
   "/contact": {
     title: "Demander un devis pour un site web | Marius BIAOU",
     description:
-      "Présentez votre projet de site internet, boutique en ligne ou solution numérique et demandez un devis à Marius BIAOU, développeur web au Bénin.",
+      "Présentez votre projet de site internet, boutique en ligne ou solution numérique et demandez un devis à Marius BIAOU, développeur web.",
+  },
+  "/confidentialite": {
+    title: "Politique de confidentialité | Marius BIAOU",
+    description:
+      "Découvrez comment les informations transmises sur le portfolio de Marius BIAOU sont collectées, utilisées, protégées et supprimées.",
   },
 };
 
@@ -65,7 +70,7 @@ export default function Seo() {
       ? {
           title: "Service de création de site web | Marius BIAOU",
           description:
-            "Découvrez ce service de création de site internet et demandez un devis adapté à votre activité auprès de Marius BIAOU, développeur web au Bénin.",
+            "Découvrez ce service de création de site internet et demandez un devis adapté à votre activité auprès de Marius BIAOU, développeur web.",
         }
       : pages[pathname] || pages["/"];
     const configuredOrigin = import.meta.env.VITE_SITE_URL?.replace(/\/$/, "");
@@ -81,7 +86,7 @@ export default function Seo() {
     setMeta('meta[name="keywords"]', {
       name: "keywords",
       content:
-        "création site web Bénin, création site internet Bénin, développeur web Bénin, développement web Bénin, boutique en ligne, WordPress, Shopify, Wix, tunnel de vente, référencement SEO",
+        "création site web, création site internet, développeur web, développement web, boutique en ligne, WordPress, Shopify, Wix, tunnel de vente, référencement SEO",
     });
     setMeta('meta[name="robots"]', {
       name: "robots",
@@ -134,11 +139,6 @@ export default function Seo() {
       url: origin,
       image: imageUrl,
       description: defaultDescription,
-      areaServed: "Bénin",
-      address: {
-        "@type": "PostalAddress",
-        addressCountry: "BJ",
-      },
       founder: {
         "@type": "Person",
         name: "Marius BIAOU",
