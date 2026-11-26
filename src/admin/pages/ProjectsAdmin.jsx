@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Edit3, Plus, Search, Trash2, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Edit3,
+  Plus,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
 import {
   deleteProject,
   getProjects,
+  reorderProjects,
   saveProject,
   uploadProjectScreenshot,
 } from "../../lib/portfolioApi";
@@ -14,6 +23,7 @@ const emptyProject = {
   image_url: "",
   project_url: "",
   status: "published",
+  display_order: 1,
 };
 const slugify = (value) =>
   value
@@ -30,6 +40,7 @@ export default function ProjectsAdmin() {
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [reordering, setReordering] = useState(false);
   const [preview, setPreview] = useState("");
 
   async function load() {
@@ -63,6 +74,10 @@ export default function ProjectsAdmin() {
       if (screenshot instanceof File && screenshot.size > 0) {
         imageUrl = await uploadProjectScreenshot(screenshot);
       }
+      const rawOrder = Number(form.get("display_order"));
+      const displayOrder = Number.isFinite(rawOrder)
+        ? Math.max(0, Math.round(rawOrder))
+        : editing?.display_order ?? projects.length + 1;
       await saveProject({
         id: editing?.id,
         title,
@@ -72,6 +87,7 @@ export default function ProjectsAdmin() {
         image_url: imageUrl,
         project_url: String(form.get("project_url")) || null,
         status: String(form.get("status")),
+        display_order: displayOrder,
       });
       setEditing(null);
       setPreview("");
@@ -115,6 +131,36 @@ export default function ProjectsAdmin() {
     setPreview(URL.createObjectURL(file));
   }
 
+  async function moveProject(index, delta) {
+    const targetIndex = index + delta;
+    if (
+      reordering ||
+      targetIndex < 0 ||
+      targetIndex >= projects.length
+    ) {
+      return;
+    }
+    const previous = projects;
+    const next = [...projects];
+    const [moved] = next.splice(index, 1);
+    next.splice(targetIndex, 0, moved);
+    const normalized = next.map((item, idx) => ({
+      ...item,
+      display_order: idx + 1,
+    }));
+    setProjects(normalized);
+    setReordering(true);
+    setError("");
+    try {
+      await reorderProjects(normalized.map((item) => item.id));
+    } catch {
+      setProjects(previous);
+      setError("Impossible de modifier l’ordre des projets.");
+    } finally {
+      setReordering(false);
+    }
+  }
+
   async function remove(id) {
     if (!window.confirm("Supprimer définitivement ce projet ?")) return;
     try {
@@ -136,7 +182,11 @@ export default function ProjectsAdmin() {
           <h1>Vos réalisations</h1>
           <p>Les modifications sont directement publiées depuis Supabase.</p>
         </div>
-        <button onClick={() => openForm(emptyProject)}>
+        <button
+          onClick={() =>
+            openForm({ ...emptyProject, display_order: projects.length + 1 })
+          }
+        >
           <Plus /> Nouveau projet
         </button>
       </header>
@@ -155,7 +205,9 @@ export default function ProjectsAdmin() {
         </span>
       </div>
       <section className="admin-project-list">
-        {visible.map((project) => (
+        {visible.map((project, index) => {
+          const isFiltering = Boolean(search.trim());
+          return (
           <article key={project.id}>
             <div className="admin-project-thumb">
               {project.image_url ? (
@@ -165,7 +217,9 @@ export default function ProjectsAdmin() {
               )}
             </div>
             <div className="admin-project-info">
-              <span>{project.category}</span>
+              <span>
+                #{project.display_order || index + 1} · {project.category}
+              </span>
               <h2>{project.title}</h2>
               <i
                 className={
@@ -176,6 +230,32 @@ export default function ProjectsAdmin() {
               </i>
             </div>
             <div className="admin-row-actions">
+              <button
+                title={
+                  isFiltering
+                    ? "Effacez la recherche pour réordonner"
+                    : "Monter dans l’ordre"
+                }
+                aria-label={`Monter ${project.title}`}
+                disabled={reordering || isFiltering || index === 0}
+                onClick={() => moveProject(index, -1)}
+              >
+                <ArrowUp />
+              </button>
+              <button
+                title={
+                  isFiltering
+                    ? "Effacez la recherche pour réordonner"
+                    : "Descendre dans l’ordre"
+                }
+                aria-label={`Descendre ${project.title}`}
+                disabled={
+                  reordering || isFiltering || index === visible.length - 1
+                }
+                onClick={() => moveProject(index, 1)}
+              >
+                <ArrowDown />
+              </button>
               <button title="Modifier" onClick={() => openForm(project)}>
                 <Edit3 />
               </button>
@@ -184,7 +264,8 @@ export default function ProjectsAdmin() {
               </button>
             </div>
           </article>
-        ))}
+          );
+        })}
       </section>
       {editing && (
         <div className="admin-modal">
@@ -263,6 +344,20 @@ export default function ProjectsAdmin() {
                 type="url"
                 defaultValue={editing.project_url || ""}
               />
+            </label>
+            <label>
+              Ordre d’affichage
+              <input
+                name="display_order"
+                type="number"
+                min="0"
+                step="1"
+                defaultValue={editing.display_order ?? projects.length + 1}
+              />
+              <small className="admin-field-help">
+                Les plus petits chiffres apparaissent en premier (sur l’accueil
+                et la page Projets).
+              </small>
             </label>
             <label>
               Statut

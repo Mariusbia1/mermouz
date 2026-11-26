@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { selectFeaturedServices } from "../../hooks/usePortfolioData";
 import { Reveal, SectionHead } from "./Reveal";
 
-export default function HomeServices({ services }) {
+export default function HomeServices({ services, featuredSlugs }) {
+  const featuredServices = selectFeaturedServices(services, featuredSlugs);
+
   return (
     <section className="hs-section" aria-labelledby="home-services-title">
       <div className="hs-head-row">
@@ -20,8 +23,8 @@ export default function HomeServices({ services }) {
       </div>
 
       <div className="hs-services">
-        {services.slice(0, 6).map(({ slug, title, short, icon: Icon }, index) => (
-          <Reveal key={slug} delay={(index % 3) * 0.08}>
+        {featuredServices.map(({ slug, title, short, icon: Icon }, index) => (
+          <Reveal key={slug} delay={index * 0.08}>
             <Link className="hs-service" to={`/services/${slug}`}>
               <span className="hs-service-index">
                 {String(index + 1).padStart(2, "0")}

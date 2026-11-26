@@ -10,6 +10,51 @@ function formatDate(value) {
   }).format(new Date(`${value}T12:00:00`));
 }
 
+function TestimonialCard({ item, index, onOpenProof, duplicate = false }) {
+  return (
+    <article
+      className="testimonial-card"
+      style={{ "--float-i": index }}
+      aria-hidden={duplicate || undefined}
+    >
+      <div className="testimonial-topline">
+        <span className="testimonial-avatar">
+          {item.client_name.charAt(0).toUpperCase()}
+        </span>
+        <div>
+          <strong>{item.client_name}</strong>
+          <small>{item.source}</small>
+        </div>
+        {item.rating && (
+          <span className="testimonial-rating">
+            <Star /> {item.rating}.0
+          </span>
+        )}
+      </div>
+      <Quote className="testimonial-quote-icon" />
+      <blockquote>{item.quote}</blockquote>
+      <div className="testimonial-details">
+        <span>{item.service}</span>
+        {item.review_date && <time>{formatDate(item.review_date)}</time>}
+      </div>
+      <footer>
+        <span>
+          <Check /> Avis client vérifié
+        </span>
+        {item.screenshot_url && (
+          <button
+            type="button"
+            tabIndex={duplicate ? -1 : undefined}
+            onClick={() => onOpenProof(item)}
+          >
+            Voir la preuve <ArrowUpRight />
+          </button>
+        )}
+      </footer>
+    </article>
+  );
+}
+
 export default function TestimonialsSection({ items }) {
   // Si la page parente a déjà chargé les avis, on évite une 2e requête.
   const fetched = useTestimonials(!items);
@@ -27,6 +72,9 @@ export default function TestimonialsSection({ items }) {
     };
   }, [proof]);
 
+  // Durée proportionnelle au nombre d'avis pour garder une vitesse constante.
+  const driftDuration = `${Math.max(28, testimonials.length * 8)}s`;
+
   return (
     <section className="testimonials-section">
       <header className="testimonials-head">
@@ -42,41 +90,33 @@ export default function TestimonialsSection({ items }) {
         </p>
       </header>
 
-      <div className="testimonials-track">
-        {testimonials.map((item) => (
-          <article className="testimonial-card" key={item.id}>
-            <div className="testimonial-topline">
-              <span className="testimonial-avatar">
-                {item.client_name.charAt(0).toUpperCase()}
-              </span>
-              <div>
-                <strong>{item.client_name}</strong>
-                <small>{item.source}</small>
-              </div>
-              {item.rating && (
-                <span className="testimonial-rating">
-                  <Star /> {item.rating}.0
-                </span>
-              )}
-            </div>
-            <Quote className="testimonial-quote-icon" />
-            <blockquote>{item.quote}</blockquote>
-            <div className="testimonial-details">
-              <span>{item.service}</span>
-              {item.review_date && <time>{formatDate(item.review_date)}</time>}
-            </div>
-            <footer>
-              <span>
-                <Check /> Avis client vérifié
-              </span>
-              {item.screenshot_url && (
-                <button type="button" onClick={() => setProof(item)}>
-                  Voir la preuve <ArrowUpRight />
-                </button>
-              )}
-            </footer>
-          </article>
-        ))}
+      <div
+        className="testimonials-marquee"
+        style={{ "--drift-duration": driftDuration }}
+      >
+        <div className="testimonials-track">
+          <div className="testimonials-group">
+            {testimonials.map((item, index) => (
+              <TestimonialCard
+                key={item.id}
+                item={item}
+                index={index}
+                onOpenProof={setProof}
+              />
+            ))}
+          </div>
+          <div className="testimonials-group" aria-hidden="true">
+            {testimonials.map((item, index) => (
+              <TestimonialCard
+                key={`dup-${item.id}`}
+                item={item}
+                index={index}
+                onOpenProof={setProof}
+                duplicate
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
       {proof && (

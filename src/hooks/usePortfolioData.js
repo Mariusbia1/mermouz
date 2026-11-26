@@ -57,6 +57,23 @@ const normalizeProject = (item, index) => ({
 const fetchTestimonials = () => getTestimonials({ publishedOnly: true });
 const identity = (item) => item;
 
+export const MAX_FEATURED_SERVICES = 3;
+
+export function selectFeaturedServices(
+  services,
+  featuredSlugs = [],
+  limit = MAX_FEATURED_SERVICES,
+) {
+  if (!Array.isArray(services) || !services.length) return [];
+  const chosen = (featuredSlugs || [])
+    .map((slug) => services.find((service) => service.slug === slug))
+    .filter(Boolean);
+  const remaining = services.filter(
+    (service) => !chosen.some((item) => item.slug === service.slug),
+  );
+  return [...chosen, ...remaining].slice(0, limit);
+}
+
 export function useServices() {
   return useRemoteList(fetchServices, portfolioServices, normalizeService);
 }

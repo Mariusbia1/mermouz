@@ -21,6 +21,7 @@ export const defaultSiteContent = {
     lead: "Vous avez une entreprise ou une idée. Je construis le site qui la rend visible, crédible et accessible à vos futurs clients.",
     description:
       "Que votre objectif soit de vendre en ligne, recevoir plus de demandes ou présenter vos services, je crée une solution moderne et simple à utiliser. Vous gérez votre métier. Je m’occupe de votre présence sur le web.",
+    featuredServices: [],
   },
   about: {
     title: "J’aime transformer une idée",

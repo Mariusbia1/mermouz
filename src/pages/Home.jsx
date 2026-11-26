@@ -90,7 +90,10 @@ export default function Home() {
         services={services}
         testimonials={testimonials}
       />
-      <HomeServices services={services} />
+      <HomeServices
+        services={services}
+        featuredSlugs={content.home?.featuredServices}
+      />
       <HomeWorks projects={projects} />
       <HomeProcess content={content} />
       <HomeAbout content={content} />

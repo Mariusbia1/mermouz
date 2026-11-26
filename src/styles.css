@@ -8390,3 +8390,210 @@ textarea {
     gap: 0.65rem;
   }
 }
+
+/* =========================================================
+   Témoignages : une seule ligne flottante (marquee + lévitation)
+   ========================================================= */
+.testimonials-section {
+  overflow-x: clip;
+  padding-inline: 0;
+}
+.testimonials-head {
+  padding-inline: 7vw;
+}
+.testimonials-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 2.6rem 0 3.2rem;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+}
+.testimonials-marquee .testimonials-track {
+  width: max-content;
+  max-width: none;
+  margin: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  overflow: visible;
+  padding: 0;
+  animation: testimonialDrift var(--drift-duration, 40s) linear infinite;
+  will-change: transform;
+}
+.testimonials-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+.testimonials-marquee .testimonial-card {
+  width: clamp(300px, 31vw, 400px);
+  flex: 0 0 auto;
+  min-height: 360px;
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  animation: testimonialFloat 6.4s ease-in-out infinite;
+  animation-delay: calc(var(--float-i, 0) * -1.35s);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.35s,
+    box-shadow 0.35s,
+    opacity 0.35s;
+}
+.testimonials-marquee .testimonial-card:nth-child(even) {
+  animation-name: testimonialFloatAlt;
+  animation-duration: 7.2s;
+}
+/* Pause douce au survol / focus clavier + mise en valeur de la carte lue */
+.testimonials-marquee:hover .testimonials-track,
+.testimonials-marquee:focus-within .testimonials-track {
+  animation-play-state: paused;
+}
+.testimonials-marquee:hover .testimonial-card {
+  opacity: 0.68;
+}
+.testimonials-marquee .testimonial-card:hover,
+.testimonials-marquee .testimonial-card:focus-within {
+  opacity: 1;
+  animation-play-state: paused;
+  transform: translateY(-14px) scale(1.025) rotate(0deg);
+  border-color: var(--blue);
+  box-shadow:
+    0 28px 65px rgba(0, 0, 0, 0.32),
+    0 0 0 1px rgba(107, 157, 207, 0.35);
+  z-index: 4;
+}
+@keyframes testimonialDrift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-50% - 0.75rem), 0, 0);
+  }
+}
+@keyframes testimonialFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.55deg);
+  }
+  50% {
+    transform: translateY(-13px) rotate(0.55deg);
+  }
+}
+@keyframes testimonialFloatAlt {
+  0%,
+  100% {
+    transform: translateY(-10px) rotate(0.5deg);
+  }
+  50% {
+    transform: translateY(4px) rotate(-0.5deg);
+  }
+}
+@media (max-width: 800px) {
+  .testimonials-marquee {
+    padding: 1.8rem 0 2.4rem;
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 4%,
+      #000 96%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 4%,
+      #000 96%,
+      transparent
+    );
+  }
+  .testimonials-marquee .testimonials-track {
+    display: flex;
+    grid-template-columns: none;
+    overflow: visible;
+    padding: 0;
+  }
+  .testimonials-marquee .testimonial-card {
+    width: min(82vw, 340px);
+    min-height: 320px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-marquee {
+    overflow-x: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+    padding-inline: 7vw;
+  }
+  .testimonials-marquee .testimonials-track,
+  .testimonials-marquee .testimonial-card {
+    animation: none;
+  }
+  .testimonials-group[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* =========================================================
+   Admin : services mis en avant + ordre des projets
+   ========================================================= */
+.admin-featured-info {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.4rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(107, 157, 207, 0.28);
+  border-radius: 10px;
+  background: rgba(107, 157, 207, 0.08);
+  color: #c5d4e2;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+.admin-featured-info svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--blue);
+}
+.admin-featured-info p {
+  margin: 0;
+}
+.admin-service-grid article footer {
+  flex-wrap: wrap;
+}
+.admin-service-grid article footer button.admin-featured-active {
+  background: rgba(107, 157, 207, 0.22);
+  border-color: var(--blue);
+  color: #ffffff;
+}
+.admin-service-grid article footer button.admin-featured-active svg {
+  fill: var(--blue);
+  color: var(--blue);
+}
+.admin-row-actions button:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+:root[data-theme="light"] .admin-featured-info {
+  color: #25384a;
+  background: rgba(62, 120, 181, 0.08);
+}
+:root[data-theme="light"] .admin-service-grid article footer button.admin-featured-active {
+  background: rgba(62, 120, 181, 0.16);
+  color: #142230;
+}
