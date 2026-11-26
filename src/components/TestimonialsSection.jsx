@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Check, Quote, Star, X } from "lucide-react";
-import { defaultTestimonials } from "../data/testimonials";
-import { getTestimonials } from "../lib/portfolioApi";
+import { useTestimonials } from "../hooks/usePortfolioData";
 
 function formatDate(value) {
   if (!value) return "";
@@ -11,17 +10,11 @@ function formatDate(value) {
   }).format(new Date(`${value}T12:00:00`));
 }
 
-export default function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState(defaultTestimonials);
+export default function TestimonialsSection({ items }) {
+  // Si la page parente a déjà chargé les avis, on évite une 2e requête.
+  const fetched = useTestimonials(!items);
+  const testimonials = items ?? fetched;
   const [proof, setProof] = useState(null);
-
-  useEffect(() => {
-    getTestimonials({ publishedOnly: true })
-      .then((items) =>
-        setTestimonials(items.length ? items : defaultTestimonials),
-      )
-      .catch(() => setTestimonials(defaultTestimonials));
-  }, []);
 
   useEffect(() => {
     if (!proof) return undefined;

@@ -4,9 +4,27 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
 import { useSiteContent } from "../hooks/useSiteContent";
+import {
+  useProjects,
+  useServices,
+  useTestimonials,
+} from "../hooks/usePortfolioData";
+import TestimonialsSection from "../components/TestimonialsSection";
+import HomeStats from "../components/home/HomeStats";
+import HomeServices from "../components/home/HomeServices";
+import HomeWorks from "../components/home/HomeWorks";
+import HomeProcess from "../components/home/HomeProcess";
+import HomeAbout from "../components/home/HomeAbout";
+import HomeSkills from "../components/home/HomeSkills";
+import HomeCta from "../components/home/HomeCta";
+import "../components/home/home.css";
 
 export default function Home() {
   const content = useSiteContent();
+  // Données chargées une seule fois ici puis partagées entre les sections.
+  const services = useServices();
+  const projects = useProjects();
+  const testimonials = useTestimonials();
   return (
     <motion.main className="page home" {...pageMotion}>
       <section className="home-hero neo-hero">
@@ -63,6 +81,22 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 1. Preuves rapides  2. Ce que je fais  3. Exemples concrets
+          4. Comment je travaille  5. Qui je suis  6. Outils
+          7. Ce qu'en disent les clients  8. Passage à l'action */}
+      <HomeStats
+        content={content}
+        services={services}
+        testimonials={testimonials}
+      />
+      <HomeServices services={services} />
+      <HomeWorks projects={projects} />
+      <HomeProcess content={content} />
+      <HomeAbout content={content} />
+      <HomeSkills content={content} />
+      <TestimonialsSection items={testimonials} />
+      <HomeCta content={content} />
     </motion.main>
   );
 }
