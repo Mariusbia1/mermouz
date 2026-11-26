@@ -109,8 +109,75 @@ export async function recordVisit(pathname) {
   }).catch(() => {});
 }
 
+export async function getAnalyticsArchive() {
+  if (!isSupabaseConfigured) {
+    return {
+      archived_visitors: 0,
+      archived_visits: 0,
+      archived_actions: 0,
+      last_reset_at: null,
+    };
+  }
+  const { data } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "analytics_archive")
+    .maybeSingle();
+  const value = data?.value || {};
+  return {
+    archived_visitors: Number(value.archived_visitors || 0),
+    archived_visits: Number(value.archived_visits || 0),
+    archived_actions: Number(value.archived_actions || 0),
+    last_reset_at: value.last_reset_at || null,
+  };
+}
+
+export async function resetVisitorActivity() {
+  const [liveStats, actionsCountResult, archive] = await Promise.all([
+    supabase.rpc("get_public_visit_stats"),
+    supabase
+      .from("visitor_events")
+      .select("id", { count: "exact", head: true })
+      .neq("event_type", "page_view"),
+    getAnalyticsArchive(),
+  ]);
+
+  const statsRow = Array.isArray(liveStats.data)
+    ? liveStats.data[0]
+    : liveStats.data;
+  const currentVisitors = Number(statsRow?.unique_visitors || 0);
+  const currentVisits = Number(statsRow?.total_visits || 0);
+  const currentActions = Number(actionsCountResult.count || 0);
+
+  const nextArchive = {
+    archived_visitors: archive.archived_visitors + currentVisitors,
+    archived_visits: archive.archived_visits + currentVisits,
+    archived_actions: archive.archived_actions + currentActions,
+    last_reset_at: new Date().toISOString(),
+  };
+
+  // Sauvegarde d'abord les totaux historiques avant de vider les tables
+  const { error: archiveError } = await supabase.from("site_settings").upsert({
+    key: "analytics_archive",
+    value: nextArchive,
+    updated_at: new Date().toISOString(),
+  });
+  if (archiveError) throw archiveError;
+
+  const [delEvents, delVisits] = await Promise.all([
+    supabase.from("visitor_events").delete().gte("id", 0),
+    supabase.from("website_visits").delete().gte("id", 0),
+  ]);
+  if (delVisits.error) throw delVisits.error;
+  if (delEvents.error && !delEvents.error.message?.includes("does not exist")) {
+    throw delEvents.error;
+  }
+
+  return nextArchive;
+}
+
 export async function getVisitorActivity({ limit = 300 } = {}) {
-  const [visitsResult, eventsResult] = await Promise.all([
+  const [visitsResult, eventsResult, archive] = await Promise.all([
     supabase
       .from("website_visits")
       .select("*")
@@ -121,6 +188,7 @@ export async function getVisitorActivity({ limit = 300 } = {}) {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(limit),
+    getAnalyticsArchive(),
   ]);
 
   if (visitsResult.error) throw visitsResult.error;
@@ -128,6 +196,7 @@ export async function getVisitorActivity({ limit = 300 } = {}) {
     visits: visitsResult.data || [],
     events: eventsResult.error ? [] : eventsResult.data || [],
     eventsTableMissing: Boolean(eventsResult.error),
+    archive,
   };
 }
 
@@ -173,12 +242,19 @@ export async function getVisitorStats() {
     };
   }
 
-  const { data, error } = await supabase.rpc("get_public_visit_stats");
+  const [{ data, error }, archive] = await Promise.all([
+    supabase.rpc("get_public_visit_stats"),
+    getAnalyticsArchive(),
+  ]);
   if (error) throw error;
   const stats = Array.isArray(data) ? data[0] : data;
+  const visitors = Number(stats?.unique_visitors || 0);
+  const visits = Number(stats?.total_visits || 0);
   return {
-    visitors: Number(stats?.unique_visitors || 0),
-    visits: Number(stats?.total_visits || 0),
+    visitors,
+    visits,
+    allTimeVisitors: visitors + archive.archived_visitors,
+    allTimeVisits: visits + archive.archived_visits,
     source: "supabase",
   };
 }

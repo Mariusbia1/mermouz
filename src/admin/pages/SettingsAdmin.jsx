@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  AlertTriangle,
-  CheckCircle2,
   Database,
   KeyRound,
   LockKeyhole,
   RefreshCw,
-  ShieldCheck,
   UserRound,
   X,
 } from "lucide-react";
@@ -159,50 +156,6 @@ export default function SettingsAdmin() {
           </button>
         </article>
       </section>
-
-      {health && (
-        <section className="admin-panel admin-health-panel">
-          <div className="admin-panel-head">
-            <div>
-              <span>DIAGNOSTIC BASE DE DONNÉES</span>
-              <h2>État des tables & permissions</h2>
-            </div>
-            <span
-              className={`admin-health-badge ${health.isAdmin ? "ok" : "warn"}`}
-            >
-              {health.isAdmin ? <ShieldCheck /> : <AlertTriangle />}
-              {health.isAdmin
-                ? "Session reconnue comme admin"
-                : "Droits admin RLS non reconnus"}
-            </span>
-          </div>
-          {!health.isAdmin && (
-            <p className="admin-data-message error">
-              Votre compte connecté ({email}) n’est pas reconnu par{" "}
-              <code>is_portfolio_admin()</code>. Exécutez le script{" "}
-              <code>supabase/admin-and-analytics.sql</code> dans le SQL Editor
-              de Supabase pour débloquer toutes les modifications (email,
-              contenus, services mis en avant, projets et suivi visiteurs).
-            </p>
-          )}
-          <div className="admin-health-grid">
-            {health.tables.map((table) => (
-              <div
-                key={table.key}
-                className={`admin-health-item ${table.ok ? "ok" : "warn"}`}
-              >
-                {table.ok ? <CheckCircle2 /> : <AlertTriangle />}
-                <div>
-                  <strong>{table.label}</strong>
-                  <small>
-                    {table.ok ? `Table ${table.key} OK` : table.error || "Manquante"}
-                  </small>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {accountOpen && (
         <div className="admin-modal">

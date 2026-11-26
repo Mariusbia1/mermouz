@@ -69,7 +69,9 @@ export default function Overview() {
           <strong>{visitorStats.visitors.toLocaleString("fr-FR")}</strong>
           <small>
             {visitorStats.source === "supabase"
-              ? `${visitorStats.visits.toLocaleString("fr-FR")} pages consultées`
+              ? visitorStats.allTimeVisitors > visitorStats.visitors
+                ? `${visitorStats.visits.toLocaleString("fr-FR")} pages · ${visitorStats.allTimeVisitors.toLocaleString("fr-FR")} depuis le début`
+                : `${visitorStats.visits.toLocaleString("fr-FR")} pages consultées`
               : "Compteur local, prêt pour Supabase"}
           </small>
         </article>

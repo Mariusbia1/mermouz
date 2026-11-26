@@ -14,10 +14,14 @@ import {
   Smartphone,
   Sparkles,
   Tablet,
+  Trash2,
   Users,
   Wrench,
 } from "lucide-react";
-import { getVisitorActivity } from "../../lib/portfolioApi";
+import {
+  getVisitorActivity,
+  resetVisitorActivity,
+} from "../../lib/portfolioApi";
 
 const EVENT_META = {
   page_view: { label: "Page consultée", icon: Eye, tone: "blue" },
@@ -74,8 +78,15 @@ function DeviceIcon({ type }) {
 export default function VisitorsAdmin() {
   const [visits, setVisits] = useState([]);
   const [events, setEvents] = useState([]);
+  const [archive, setArchive] = useState({
+    archived_visitors: 0,
+    archived_visits: 0,
+    archived_actions: 0,
+    last_reset_at: null,
+  });
   const [eventsTableMissing, setEventsTableMissing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [resetting, setResetting] = useState(false);
   const [error, setError] = useState("");
   const [selectedVisitor, setSelectedVisitor] = useState(null);
   const [eventFilter, setEventFilter] = useState("all");
@@ -87,6 +98,7 @@ export default function VisitorsAdmin() {
       const data = await getVisitorActivity({ limit: 400 });
       setVisits(data.visits);
       setEvents(data.events);
+      setArchive(data.archive);
       setEventsTableMissing(data.eventsTableMissing);
     } catch (requestError) {
       setError(
@@ -94,6 +106,35 @@ export default function VisitorsAdmin() {
       );
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleReset() {
+    if (resetting) return;
+    if (
+      !window.confirm(
+        "Vider la liste actuelle des visiteurs et repartir à 0 ? Le nombre total depuis le début sera conservé.",
+      )
+    ) {
+      return;
+    }
+    setResetting(true);
+    setError("");
+    try {
+      const nextArchive = await resetVisitorActivity();
+      setArchive(nextArchive);
+      setVisits([]);
+      setEvents([]);
+      setSelectedVisitor(null);
+    } catch (requestError) {
+      const msg = requestError?.message || "";
+      setError(
+        msg.includes("row-level security")
+          ? "Autorisation de suppression manquante sur website_visits. Relancez supabase/admin-and-analytics.sql dans Supabase."
+          : msg || "Impossible de vider les visiteurs.",
+      );
+    } finally {
+      setResetting(false);
     }
   }
 
@@ -216,9 +257,19 @@ export default function VisitorsAdmin() {
             qu’elles réalisent en temps réel.
           </p>
         </div>
-        <button type="button" onClick={load} disabled={loading}>
-          <RefreshCw /> {loading ? "Actualisation..." : "Actualiser"}
-        </button>
+        <div className="admin-head-actions">
+          <button type="button" onClick={load} disabled={loading}>
+            <RefreshCw /> {loading ? "Actualisation..." : "Actualiser"}
+          </button>
+          <button
+            type="button"
+            className="admin-reset-button"
+            onClick={handleReset}
+            disabled={resetting || (!visits.length && !events.length)}
+          >
+            <Trash2 /> {resetting ? "Réinitialisation..." : "Vider à 0"}
+          </button>
+        </div>
       </header>
 
       {error && <p className="admin-data-message error">{error}</p>}
@@ -235,10 +286,25 @@ export default function VisitorsAdmin() {
         <article>
           <div>
             <Users />
-            <span>Visiteurs uniques</span>
+            <span>Visiteurs (période en cours)</span>
           </div>
           <strong>{visitors.length}</strong>
           <small>{todayCount} actif{todayCount > 1 ? "s" : ""} aujourd’hui</small>
+        </article>
+        <article>
+          <div>
+            <Activity />
+            <span>Total depuis le début</span>
+          </div>
+          <strong>
+            {(visitors.length + archive.archived_visitors).toLocaleString(
+              "fr-FR",
+            )}
+          </strong>
+          <small>
+            {(visits.length + archive.archived_visits).toLocaleString("fr-FR")}{" "}
+            pages vues au total
+          </small>
         </article>
         <article>
           <div>
@@ -246,7 +312,11 @@ export default function VisitorsAdmin() {
             <span>Pages consultées</span>
           </div>
           <strong>{visits.length}</strong>
-          <small>Sur les 400 dernières visites</small>
+          <small>
+            {archive.last_reset_at
+              ? `Depuis le ${formatDateTime(archive.last_reset_at)}`
+              : "Sur la période actuelle"}
+          </small>
         </article>
         <article>
           <div>
@@ -254,19 +324,10 @@ export default function VisitorsAdmin() {
             <span>Actions enregistrées</span>
           </div>
           <strong>{totalActions}</strong>
-          <small>Clics services, projets, contact, CV…</small>
-        </article>
-        <article>
-          <div>
-            <Activity />
-            <span>Engagement moyen</span>
-          </div>
-          <strong>
-            {visitors.length
-              ? (visits.length / visitors.length).toFixed(1).replace(".", ",")
-              : "0"}
-          </strong>
-          <small>Pages consultées par visiteur</small>
+          <small>
+            {(totalActions + archive.archived_actions).toLocaleString("fr-FR")}{" "}
+            au total depuis le début
+          </small>
         </article>
       </section>
 

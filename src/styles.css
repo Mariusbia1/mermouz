@@ -8828,6 +8828,25 @@ textarea {
   margin: 0 0 1rem;
   font: 500 0.95rem "Chillax", sans-serif;
 }
+.admin-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+.admin-page-head button.admin-reset-button {
+  background: rgba(190, 92, 92, 0.1);
+  border: 1px solid rgba(190, 92, 92, 0.28);
+  color: #e2a2a2;
+}
+.admin-page-head button.admin-reset-button:hover:not(:disabled) {
+  background: rgba(190, 92, 92, 0.2);
+  border-color: #d07878;
+}
+.admin-page-head button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 @media (max-width: 960px) {
   .admin-visitors-layout {
     grid-template-columns: 1fr;
