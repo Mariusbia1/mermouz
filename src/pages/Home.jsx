@@ -17,6 +17,7 @@ import HomeProcess from "../components/home/HomeProcess";
 import HomeAbout from "../components/home/HomeAbout";
 import HomeSkills from "../components/home/HomeSkills";
 import HomeCta from "../components/home/HomeCta";
+import WelcomeConfetti from "../components/home/WelcomeConfetti";
 import "../components/home/home.css";
 
 export default function Home() {
@@ -27,6 +28,7 @@ export default function Home() {
   const testimonials = useTestimonials();
   return (
     <motion.main className="page home" {...pageMotion}>
+      <WelcomeConfetti />
       <section className="home-hero neo-hero">
         <div className="neo-copy">
           <div className="neo-intro">

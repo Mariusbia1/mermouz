@@ -140,8 +140,8 @@ export default function Resume() {
 
       <section className="career-summary">
         <article>
-          <strong>+2</strong>
-          <span>années d’apprentissage et de pratique</span>
+          <strong>2</strong>
+          <span>ans d’expérience</span>
         </article>
         <article>
           <strong>4</strong>
