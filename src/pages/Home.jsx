@@ -85,11 +85,7 @@ export default function Home() {
       {/* 1. Preuves rapides  2. Ce que je fais  3. Exemples concrets
           4. Comment je travaille  5. Qui je suis  6. Outils
           7. Ce qu'en disent les clients  8. Passage à l'action */}
-      <HomeStats
-        content={content}
-        services={services}
-        testimonials={testimonials}
-      />
+      <HomeStats content={content} />
       <HomeServices
         services={services}
         featuredSlugs={content.home?.featuredServices}
