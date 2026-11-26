@@ -17,12 +17,21 @@ import {
 export default function ContentAdmin() {
   const [content, setContent] = useState(defaultSiteContent);
   const [status, setStatus] = useState("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const [openSection, setOpenSection] = useState("profile");
   useEffect(() => {
     getSiteContent()
       .then(setContent)
       .catch(() => {});
   }, []);
+
+  function formatSaveError(err) {
+    const msg = err?.message || "";
+    if (msg.includes("row-level security")) {
+      return "Droits administrateur refusés par Supabase (RLS). Exécutez le script supabase/admin-and-analytics.sql dans le SQL Editor de Supabase puis réessayez.";
+    }
+    return msg || "Une erreur est survenue. Vérifiez la configuration Supabase.";
+  }
 
   function setSection(section, key, value) {
     setContent((current) => ({
@@ -52,24 +61,36 @@ export default function ContentAdmin() {
     const file = event.target.files?.[0];
     if (!file) return;
     setStatus("saving");
+    setErrorMessage("");
     try {
       const photoUrl = await uploadProfilePhoto(file);
       setSection("profile", "photoUrl", photoUrl);
       setStatus("idle");
-    } catch {
+    } catch (err) {
+      setErrorMessage(formatSaveError(err));
       setStatus("error");
     }
   }
   async function submit(event) {
     event.preventDefault();
     setStatus("saving");
+    setErrorMessage("");
     try {
       await saveSiteContent(content);
       setStatus("saved");
       window.setTimeout(() => setStatus("idle"), 1800);
-    } catch {
+    } catch (err) {
+      setErrorMessage(formatSaveError(err));
       setStatus("error");
     }
+  }
+
+  function updateStat(index, key, value) {
+    const currentStats = content.home.stats || defaultSiteContent.home.stats;
+    const nextStats = currentStats.map((item, itemIndex) =>
+      itemIndex === index ? { ...item, [key]: value } : item,
+    );
+    setSection("home", "stats", nextStats);
   }
 
   return (
@@ -215,15 +236,54 @@ export default function ContentAdmin() {
             </button>
           </div>
           <div className="admin-form-fields">
-            {Object.entries(content.home).map(([key, value]) => (
+            {[
+              ["titleLine1", "Titre — ligne 1"],
+              ["titleLine2", "Titre — ligne 2"],
+              ["titleLine3", "Titre — ligne 3"],
+              ["titleAccent", "Mot mis en valeur (en bleu)"],
+              ["lead", "Phrase d’accroche"],
+              ["description", "Description"],
+            ].map(([key, label]) => (
               <label key={key}>
-                {key}
+                {label}
                 <textarea
-                  value={value}
+                  value={content.home[key] || ""}
                   onChange={(e) => setSection("home", key, e.target.value)}
                 />
               </label>
             ))}
+          </div>
+          <div className="admin-stats-editor">
+            <h3>Chiffres clés de l’accueil</h3>
+            <div className="admin-repeat-list">
+              {(content.home.stats || defaultSiteContent.home.stats).map(
+                (stat, index) => (
+                  <article key={index}>
+                    <input
+                      placeholder="Valeur (ex: +40)"
+                      value={stat.value || ""}
+                      onChange={(e) =>
+                        updateStat(index, "value", e.target.value)
+                      }
+                    />
+                    <input
+                      placeholder="Titre (ex: Projets livrés)"
+                      value={stat.label || ""}
+                      onChange={(e) =>
+                        updateStat(index, "label", e.target.value)
+                      }
+                    />
+                    <input
+                      placeholder="Sous-texte"
+                      value={stat.detail || ""}
+                      onChange={(e) =>
+                        updateStat(index, "detail", e.target.value)
+                      }
+                    />
+                  </article>
+                ),
+              )}
+            </div>
           </div>
         </section>
         <section className={openSection === "about" ? "" : "admin-tab-hidden"}>
@@ -451,8 +511,9 @@ export default function ContentAdmin() {
           </div>
         </section>
         {status === "error" && (
-          <p className="admin-data-message error">
-            Une erreur est survenue. Vérifiez la configuration Supabase.
+          <p className="admin-data-message error" role="alert">
+            {errorMessage ||
+              "Une erreur est survenue. Vérifiez la configuration Supabase."}
           </p>
         )}
         <button

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
+  Activity,
   BriefcaseBusiness,
   ChevronLeft,
   FileText,
@@ -18,6 +19,7 @@ import NotificationsMenu from "./NotificationsMenu";
 
 const navigation = [
   { to: "/admin", label: "Vue d’ensemble", icon: LayoutDashboard, end: true },
+  { to: "/admin/visitors", label: "Visiteurs & Activité", icon: Activity },
   { to: "/admin/projects", label: "Projets", icon: BriefcaseBusiness },
   { to: "/admin/services", label: "Services", icon: Wrench },
   { to: "/admin/requests", label: "Demandes", icon: MessageSquareText },
@@ -28,7 +30,22 @@ const navigation = [
 
 export default function AdminLayout() {
   const [open, setOpen] = useState(false);
+  const [adminName, setAdminName] = useState("Marius BIAOU");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const fullName = data.user?.user_metadata?.full_name;
+      if (fullName) setAdminName(fullName);
+    });
+  }, []);
+
+  const initials = adminName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join("");
 
   async function logout() {
     await supabase.auth.signOut();
@@ -69,11 +86,11 @@ export default function AdminLayout() {
           </button>
           <div>
             <span>ESPACE ADMINISTRATEUR</span>
-            <strong>BIAOU Marius</strong>
+            <strong>{adminName}</strong>
           </div>
           <div className="admin-topbar-actions">
             <NotificationsMenu />
-            <i>BM</i>
+            <i>{initials || "MB"}</i>
           </div>
         </header>
         <div className="admin-page">

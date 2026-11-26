@@ -21,6 +21,7 @@ export default function Overview() {
     source: "loading",
   });
   const [requests, setRequests] = useState([]);
+  const [newRequestsCount, setNewRequestsCount] = useState(0);
   const [projectCount, setProjectCount] = useState(0);
   const [serviceCount, setServiceCount] = useState(0);
 
@@ -33,7 +34,10 @@ export default function Overview() {
     ])
       .then(([stats, contacts, projects, services]) => {
         setVisitorStats(stats);
-        setRequests(contacts.slice(0, 3));
+        setRequests(contacts.slice(0, 5));
+        setNewRequestsCount(
+          contacts.filter((item) => item.status === "nouveau").length,
+        );
         setProjectCount(
           projects.filter((item) => item.status === "published").length,
         );
@@ -74,9 +78,7 @@ export default function Overview() {
             <MessageSquareText />
             <span>Nouvelles demandes</span>
           </div>
-          <strong>
-            {requests.filter((item) => item.status === "nouveau").length}
-          </strong>
+          <strong>{newRequestsCount}</strong>
           <small>Demandes qui attendent votre réponse</small>
         </article>
         <article>
@@ -130,6 +132,9 @@ export default function Overview() {
               <h2>Que voulez-vous faire ?</h2>
             </div>
           </div>
+          <Link to="/admin/visitors">
+            Voir les visiteurs et actions <ArrowUpRight />
+          </Link>
           <Link to="/admin/projects">
             Ajouter un projet <ArrowUpRight />
           </Link>
