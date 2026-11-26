@@ -113,7 +113,7 @@ export default function VisitorsAdmin() {
     if (resetting) return;
     if (
       !window.confirm(
-        "Vider la liste actuelle des visiteurs et repartir à 0 ? Le nombre total depuis le début sera conservé.",
+        "Supprimer définitivement les visites et actions enregistrées en base de données ? Le total depuis le début restera affiché.",
       )
     ) {
       return;
@@ -258,16 +258,25 @@ export default function VisitorsAdmin() {
           </p>
         </div>
         <div className="admin-head-actions">
-          <button type="button" onClick={load} disabled={loading}>
-            <RefreshCw /> {loading ? "Actualisation..." : "Actualiser"}
+          <button
+            type="button"
+            className="admin-icon-button"
+            onClick={load}
+            disabled={loading}
+            title="Actualiser"
+            aria-label="Actualiser"
+          >
+            <RefreshCw className={loading ? "spin" : ""} />
           </button>
           <button
             type="button"
-            className="admin-reset-button"
+            className="admin-icon-button admin-reset-button"
             onClick={handleReset}
             disabled={resetting || (!visits.length && !events.length)}
+            title="Vider définitivement en base de données"
+            aria-label="Vider définitivement les visiteurs"
           >
-            <Trash2 /> {resetting ? "Réinitialisation..." : "Vider à 0"}
+            <Trash2 />
           </button>
         </div>
       </header>
