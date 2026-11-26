@@ -1,61 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { ArrowUpRight, Blocks, ShoppingBag, Workflow } from "lucide-react";
+import React from "react";
+import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { pageMotion } from "../config/motion";
-import { getProjects } from "../lib/portfolioApi";
+import { useProjects } from "../hooks/usePortfolioData";
 import TestimonialsSection from "../components/TestimonialsSection";
 
-const projects = [
-  {
-    title: "Plateforme de gestion",
-    category: "Application web",
-    description:
-      "Un espace central pour organiser les informations, suivre les opérations et simplifier le travail quotidien d’une équipe.",
-    result: "Des tâches mieux organisées et moins de temps perdu.",
-    tags: ["Tableau de bord", "Automatisation", "Gestion des accès"],
-    icon: Blocks,
-    tone: "blue",
-  },
-  {
-    title: "Outil métier personnalisé",
-    category: "Solution pour entreprise",
-    description:
-      "Une solution conçue autour d’un processus spécifique pour remplacer les manipulations répétitives et les fichiers dispersés.",
-    result: "Un suivi plus fiable et une activité plus simple à piloter.",
-    tags: ["Espace client", "Données centralisées", "Rapports"],
-    icon: Workflow,
-    tone: "navy",
-  },
-  {
-    title: "Expérience de vente en ligne",
-    category: "Commerce en ligne",
-    description:
-      "Un parcours clair et rassurant pour présenter les produits, faciliter le choix et conduire les visiteurs jusqu’à la commande.",
-    result: "Une expérience plus fluide qui favorise les ventes.",
-    tags: ["Catalogue", "Paiement", "Expérience mobile"],
-    icon: ShoppingBag,
-    tone: "slate",
-  },
-];
-
 export default function Works() {
-  const [visibleProjects, setVisibleProjects] = useState(projects);
-  useEffect(() => {
-    getProjects({ publishedOnly: true })
-      .then((data) => {
-        if (!data.length) return;
-        setVisibleProjects(
-          data.map((item, index) => ({
-            ...item,
-            description: item.summary,
-            tags: [],
-            icon: [Blocks, Workflow, ShoppingBag][index % 3],
-            tone: ["blue", "navy", "slate"][index % 3],
-          })),
-        );
-      })
-      .catch(() => {});
-  }, []);
+  const visibleProjects = useProjects();
   return (
     <motion.main className="page inner-page projects-page" {...pageMotion}>
       <header className="page-head projects-head">

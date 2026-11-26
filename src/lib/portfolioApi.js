@@ -94,11 +94,25 @@ export async function getProjects({ publishedOnly = false } = {}) {
   let query = supabase
     .from("projects")
     .select("*")
-    .order("display_order", { ascending: true });
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
   if (publishedOnly) query = query.eq("status", "published");
   const { data, error } = await query;
   if (error) throw error;
   return data;
+}
+
+export async function reorderProjects(orderedIds) {
+  const results = await Promise.all(
+    orderedIds.map((id, index) =>
+      supabase
+        .from("projects")
+        .update({ display_order: index + 1 })
+        .eq("id", id),
+    ),
+  );
+  const failed = results.find((result) => result.error);
+  if (failed?.error) throw failed.error;
 }
 
 export async function saveProject(project) {

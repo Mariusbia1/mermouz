@@ -1,27 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { portfolioServices } from "../data/services";
 import { pageMotion } from "../config/motion";
-import { getServices } from "../lib/portfolioApi";
+import { useServices } from "../hooks/usePortfolioData";
+
 export default function Services() {
-  const [services, setServices] = useState(portfolioServices);
-  useEffect(() => {
-    getServices({ activeOnly: true })
-      .then((data) =>
-        setServices(
-          data.map((item) => ({
-            ...item,
-            short: item.short_description,
-            icon:
-              portfolioServices.find((service) => service.slug === item.slug)
-                ?.icon || portfolioServices[0].icon,
-          })),
-        ),
-      )
-      .catch(() => {});
-  }, []);
+  const services = useServices();
   return (
     <motion.main className="page inner-page services-page" {...pageMotion}>
       <header className="page-head services-head">

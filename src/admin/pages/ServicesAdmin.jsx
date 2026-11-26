@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Edit3, Eye, EyeOff, Plus, Trash2, Wrench, X } from "lucide-react";
+import {
+  Edit3,
+  Eye,
+  EyeOff,
+  Home,
+  Plus,
+  Star,
+  Trash2,
+  Wrench,
+  X,
+} from "lucide-react";
 import {
   deleteService,
   getServices,
+  getSiteContent,
   saveService,
+  saveSiteContent,
 } from "../../lib/portfolioApi";
+import { MAX_FEATURED_SERVICES } from "../../hooks/usePortfolioData";
 
 const emptyService = {
   title: "",
@@ -26,9 +39,16 @@ export default function ServicesAdmin() {
   const [services, setServices] = useState([]);
   const [editing, setEditing] = useState(null);
   const [error, setError] = useState("");
+  const [featured, setFeatured] = useState([]);
+  const [savingFeatured, setSavingFeatured] = useState(false);
   async function load() {
     try {
-      setServices(await getServices());
+      const [items, content] = await Promise.all([
+        getServices(),
+        getSiteContent(),
+      ]);
+      setServices(items);
+      setFeatured(content.home?.featuredServices || []);
     } catch {
       setError("Impossible de charger les services.");
     }
@@ -36,6 +56,41 @@ export default function ServicesAdmin() {
   useEffect(() => {
     load();
   }, []);
+
+  // Choix des services mis en avant sur la page d'accueil (max 3, ordre de sélection).
+  async function toggleFeatured(service) {
+    if (savingFeatured) return;
+    const isFeatured = featured.includes(service.slug);
+    if (!isFeatured && featured.length >= MAX_FEATURED_SERVICES) {
+      setError(
+        `Vous pouvez mettre en avant ${MAX_FEATURED_SERVICES} services maximum. Retirez-en un avant d’en ajouter un autre.`,
+      );
+      return;
+    }
+    if (!isFeatured && !service.is_active) {
+      setError("Activez d’abord ce service pour pouvoir l’afficher sur l’accueil.");
+      return;
+    }
+    const next = isFeatured
+      ? featured.filter((slug) => slug !== service.slug)
+      : [...featured, service.slug];
+    setSavingFeatured(true);
+    setError("");
+    try {
+      const content = await getSiteContent();
+      await saveSiteContent({
+        ...content,
+        home: { ...content.home, featuredServices: next },
+      });
+      setFeatured(next);
+    } catch (requestError) {
+      setError(
+        requestError?.message || "Impossible de mettre à jour l’accueil.",
+      );
+    } finally {
+      setSavingFeatured(false);
+    }
+  }
 
   async function submit(event) {
     event.preventDefault();
@@ -69,16 +124,33 @@ export default function ServicesAdmin() {
   }
   async function toggle(service) {
     try {
-      await saveService({ ...service, is_active: !service.is_active });
+      const nextActive = !service.is_active;
+      await saveService({ ...service, is_active: nextActive });
+      if (!nextActive && featured.includes(service.slug)) {
+        const content = await getSiteContent();
+        const nextFeatured = featured.filter((slug) => slug !== service.slug);
+        await saveSiteContent({
+          ...content,
+          home: { ...content.home, featuredServices: nextFeatured },
+        });
+      }
       await load();
     } catch {
       setError("La modification a échoué.");
     }
   }
-  async function remove(id) {
+  async function remove(service) {
     if (!window.confirm("Supprimer définitivement ce service ?")) return;
     try {
-      await deleteService(id);
+      await deleteService(service.id);
+      if (featured.includes(service.slug)) {
+        const content = await getSiteContent();
+        const nextFeatured = featured.filter((slug) => slug !== service.slug);
+        await saveSiteContent({
+          ...content,
+          home: { ...content.home, featuredServices: nextFeatured },
+        });
+      }
       await load();
     } catch {
       setError("La suppression a échoué.");
@@ -98,8 +170,22 @@ export default function ServicesAdmin() {
         </button>
       </header>
       {error && <p className="admin-data-message error">{error}</p>}
+      <div className="admin-featured-info">
+        <Home />
+        <p>
+          <strong>
+            Accueil : {featured.length}/{MAX_FEATURED_SERVICES} services mis en
+            avant.
+          </strong>{" "}
+          Cliquez sur « Mettre en avant » pour choisir les services affichés
+          sur la page d’accueil (dans l’ordre de sélection). Sans sélection,
+          les {MAX_FEATURED_SERVICES} premiers services actifs sont affichés.
+        </p>
+      </div>
       <section className="admin-service-grid">
-        {services.map((service) => (
+        {services.map((service) => {
+          const rank = featured.indexOf(service.slug);
+          return (
           <article
             className={service.is_active ? "" : "disabled"}
             key={service.id}
@@ -108,11 +194,23 @@ export default function ServicesAdmin() {
               <Wrench />
             </div>
             <div>
-              <span>{service.is_active ? "ACTIF" : "MASQUÉ"}</span>
+              <span>
+                {service.is_active ? "ACTIF" : "MASQUÉ"}
+                {rank >= 0 && ` · ACCUEIL #${rank + 1}`}
+              </span>
               <h2>{service.title}</h2>
               <p>{service.short_description}</p>
             </div>
             <footer>
+              <button
+                className={rank >= 0 ? "admin-featured-active" : ""}
+                onClick={() => toggleFeatured(service)}
+                disabled={savingFeatured}
+                aria-pressed={rank >= 0}
+              >
+                <Star />
+                {rank >= 0 ? "Retirer de l’accueil" : "Mettre en avant"}
+              </button>
               <button onClick={() => setEditing(service)}>
                 <Edit3 /> Modifier
               </button>
@@ -122,13 +220,14 @@ export default function ServicesAdmin() {
               </button>
               <button
                 className="admin-delete-action"
-                onClick={() => remove(service.id)}
+                onClick={() => remove(service)}
               >
                 <Trash2 /> Supprimer
               </button>
             </footer>
           </article>
-        ))}
+          );
+        })}
       </section>
       {editing && (
         <div className="admin-modal">
