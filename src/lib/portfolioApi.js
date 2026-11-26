@@ -3,6 +3,7 @@ import { defaultSiteContent } from "../data/siteContent";
 import { defaultTestimonials } from "../data/testimonials";
 
 const VISITOR_KEY = "mermouz_visitor_id";
+const SESSION_KEY = "mermouz_session_id";
 const LOCAL_VISITS_KEY = "mermouz_local_visitors";
 
 function getVisitorId() {
@@ -14,7 +15,62 @@ function getVisitorId() {
   return visitorId;
 }
 
+function getSessionId() {
+  let sessionId = sessionStorage.getItem(SESSION_KEY);
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    sessionStorage.setItem(SESSION_KEY, sessionId);
+  }
+  return sessionId;
+}
+
+function getDeviceInfo() {
+  if (typeof navigator === "undefined" || typeof window === "undefined") {
+    return { device_type: "Inconnu", browser: "Inconnu", screen_size: "" };
+  }
+  const ua = navigator.userAgent || "";
+  const width = window.innerWidth || 0;
+  const device_type =
+    /tablet|ipad/i.test(ua) || (width >= 640 && width < 1024 && /mobile/i.test(ua))
+      ? "Tablette"
+      : /mobi|android|iphone/i.test(ua) || width < 640
+        ? "Mobile"
+        : "Ordinateur";
+
+  let browser = "Autre";
+  if (/edg/i.test(ua)) browser = "Edge";
+  else if (/opr|opera/i.test(ua)) browser = "Opera";
+  else if (/chrome|crios/i.test(ua)) browser = "Chrome";
+  else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
+  else if (/safari/i.test(ua)) browser = "Safari";
+
+  const screen_size = `${window.screen?.width || width}×${window.screen?.height || window.innerHeight || 0}`;
+  return { device_type, browser, screen_size };
+}
+
+export async function recordVisitorEvent(
+  eventType,
+  eventLabel = "",
+  metadata = {},
+) {
+  if (!isSupabaseConfigured) return;
+  const pathname = window.location.pathname || "/";
+  if (pathname.startsWith("/admin")) return;
+
+  const visitorId = getVisitorId();
+  const sessionId = getSessionId();
+  await supabase.from("visitor_events").insert({
+    visitor_id: visitorId,
+    session_id: sessionId,
+    event_type: eventType,
+    event_label: eventLabel ? String(eventLabel).slice(0, 140) : null,
+    page_path: pathname,
+    metadata,
+  });
+}
+
 export async function recordVisit(pathname) {
+  if (pathname.startsWith("/admin")) return;
   const visitorId = getVisitorId();
   if (!isSupabaseConfigured) {
     const visitors = new Set(
@@ -26,13 +82,154 @@ export async function recordVisit(pathname) {
   }
 
   const sessionKey = `mermouz_visit_${pathname}`;
-  if (sessionStorage.getItem(sessionKey)) return;
-  const { error } = await supabase.from("website_visits").insert({
-    visitor_id: visitorId,
-    page_path: pathname,
+  const device = getDeviceInfo();
+  if (!sessionStorage.getItem(sessionKey)) {
+    const payload = {
+      visitor_id: visitorId,
+      page_path: pathname,
+      referrer: document.referrer || null,
+      ...device,
+    };
+    let { error } = await supabase.from("website_visits").insert(payload);
+    // Fallback si les nouvelles colonnes n'ont pas encore été ajoutées dans Supabase
+    if (error && error.message?.includes("column")) {
+      const retry = await supabase.from("website_visits").insert({
+        visitor_id: visitorId,
+        page_path: pathname,
+        referrer: document.referrer || null,
+      });
+      error = retry.error;
+    }
+    if (!error) sessionStorage.setItem(sessionKey, "recorded");
+  }
+
+  recordVisitorEvent("page_view", pathname, {
     referrer: document.referrer || null,
+    ...device,
+  }).catch(() => {});
+}
+
+export async function getAnalyticsArchive() {
+  if (!isSupabaseConfigured) {
+    return {
+      archived_visitors: 0,
+      archived_visits: 0,
+      archived_actions: 0,
+      last_reset_at: null,
+    };
+  }
+  const { data } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "analytics_archive")
+    .maybeSingle();
+  const value = data?.value || {};
+  return {
+    archived_visitors: Number(value.archived_visitors || 0),
+    archived_visits: Number(value.archived_visits || 0),
+    archived_actions: Number(value.archived_actions || 0),
+    last_reset_at: value.last_reset_at || null,
+  };
+}
+
+export async function resetVisitorActivity() {
+  const [liveStats, actionsCountResult, archive] = await Promise.all([
+    supabase.rpc("get_public_visit_stats"),
+    supabase
+      .from("visitor_events")
+      .select("id", { count: "exact", head: true })
+      .neq("event_type", "page_view"),
+    getAnalyticsArchive(),
+  ]);
+
+  const statsRow = Array.isArray(liveStats.data)
+    ? liveStats.data[0]
+    : liveStats.data;
+  const currentVisitors = Number(statsRow?.unique_visitors || 0);
+  const currentVisits = Number(statsRow?.total_visits || 0);
+  const currentActions = Number(actionsCountResult.count || 0);
+
+  const nextArchive = {
+    archived_visitors: archive.archived_visitors + currentVisitors,
+    archived_visits: archive.archived_visits + currentVisits,
+    archived_actions: archive.archived_actions + currentActions,
+    last_reset_at: new Date().toISOString(),
+  };
+
+  // Sauvegarde d'abord les totaux historiques avant de vider les tables
+  const { error: archiveError } = await supabase.from("site_settings").upsert({
+    key: "analytics_archive",
+    value: nextArchive,
+    updated_at: new Date().toISOString(),
   });
-  if (!error) sessionStorage.setItem(sessionKey, "recorded");
+  if (archiveError) throw archiveError;
+
+  const [delEvents, delVisits] = await Promise.all([
+    supabase.from("visitor_events").delete().gte("id", 0),
+    supabase.from("website_visits").delete().gte("id", 0),
+  ]);
+  if (delVisits.error) throw delVisits.error;
+  if (delEvents.error && !delEvents.error.message?.includes("does not exist")) {
+    throw delEvents.error;
+  }
+
+  return nextArchive;
+}
+
+export async function getVisitorActivity({ limit = 300 } = {}) {
+  const [visitsResult, eventsResult, archive] = await Promise.all([
+    supabase
+      .from("website_visits")
+      .select("*")
+      .order("visited_at", { ascending: false })
+      .limit(limit),
+    supabase
+      .from("visitor_events")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit),
+    getAnalyticsArchive(),
+  ]);
+
+  if (visitsResult.error) throw visitsResult.error;
+  return {
+    visits: visitsResult.data || [],
+    events: eventsResult.error ? [] : eventsResult.data || [],
+    eventsTableMissing: Boolean(eventsResult.error),
+    archive,
+  };
+}
+
+export async function checkDatabaseHealth() {
+  const tables = [
+    { key: "projects", label: "Projets" },
+    { key: "services", label: "Services" },
+    { key: "contact_requests", label: "Demandes" },
+    { key: "testimonials", label: "Témoignages" },
+    { key: "site_settings", label: "Contenus du site" },
+    { key: "website_visits", label: "Visites" },
+    { key: "visitor_events", label: "Actions visiteurs" },
+  ];
+
+  const [checks, adminCheck] = await Promise.all([
+    Promise.all(
+      tables.map(async (table) => {
+        const { error } = await supabase.from(table.key).select("*").limit(1);
+        return {
+          ...table,
+          ok: !error,
+          error: error?.message || "",
+        };
+      }),
+    ),
+    supabase.rpc("is_portfolio_admin"),
+  ]);
+
+  return {
+    tables: checks,
+    isAdmin: adminCheck.error ? null : Boolean(adminCheck.data),
+    adminError: adminCheck.error?.message || "",
+  };
 }
 
 export async function getVisitorStats() {
@@ -45,12 +242,19 @@ export async function getVisitorStats() {
     };
   }
 
-  const { data, error } = await supabase.rpc("get_public_visit_stats");
+  const [{ data, error }, archive] = await Promise.all([
+    supabase.rpc("get_public_visit_stats"),
+    getAnalyticsArchive(),
+  ]);
   if (error) throw error;
   const stats = Array.isArray(data) ? data[0] : data;
+  const visitors = Number(stats?.unique_visitors || 0);
+  const visits = Number(stats?.total_visits || 0);
   return {
-    visitors: Number(stats?.unique_visitors || 0),
-    visits: Number(stats?.total_visits || 0),
+    visitors,
+    visits,
+    allTimeVisitors: visitors + archive.archived_visitors,
+    allTimeVisits: visits + archive.archived_visits,
     source: "supabase",
   };
 }
@@ -71,6 +275,10 @@ export async function createContactRequest(payload) {
 
   const { error } = await supabase.from("contact_requests").insert(payload);
   if (error) throw error;
+  recordVisitorEvent(
+    "form_submit",
+    payload.service_slug || "Demande de contact",
+  ).catch(() => {});
 }
 
 export async function getContactRequests() {

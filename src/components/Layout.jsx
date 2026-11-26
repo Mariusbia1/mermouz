@@ -7,7 +7,7 @@ import {
   FaLinkedinIn,
   FaWhatsapp,
 } from "react-icons/fa6";
-import { recordVisit } from "../lib/portfolioApi";
+import { recordVisit, recordVisitorEvent } from "../lib/portfolioApi";
 import { useSiteContent } from "../hooks/useSiteContent";
 
 function ScrollToTop() {
@@ -51,6 +51,63 @@ export default function Layout() {
       // Les statistiques ne doivent jamais bloquer l’affichage du site.
     });
   }, [location.pathname]);
+
+  // Suivi automatique des actions clés du visiteur (clics services, projets, contact, CV, réseaux...)
+  useEffect(() => {
+    function handleTrackedClick(event) {
+      const target = event.target?.closest?.("a, button");
+      if (!target) return;
+
+      const label = (
+        target.getAttribute("aria-label") ||
+        target.textContent ||
+        ""
+      )
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 100);
+      const href = target.getAttribute("href") || "";
+
+      if (href.startsWith("mailto:")) {
+        recordVisitorEvent("click_email", href.replace("mailto:", "")).catch(
+          () => {},
+        );
+      } else if (href.includes("wa.me") || href.includes("whatsapp")) {
+        recordVisitorEvent("click_whatsapp", "WhatsApp").catch(() => {});
+      } else if (href.endsWith(".pdf") || href === "/cv") {
+        recordVisitorEvent("download_cv", label || "CV").catch(() => {});
+      } else if (href.startsWith("/services/")) {
+        recordVisitorEvent("click_service", label || href, { href }).catch(
+          () => {},
+        );
+      } else if (
+        target.closest(".hs-work, .project-card") &&
+        target.tagName === "A"
+      ) {
+        recordVisitorEvent("click_project", label || href, { href }).catch(
+          () => {},
+        );
+      } else if (target.closest(".social-links")) {
+        recordVisitorEvent("click_social", label || href, { href }).catch(
+          () => {},
+        );
+      } else if (href === "/contact" || target.classList.contains("neo-primary")) {
+        recordVisitorEvent("click_cta", label || "Contact", { href }).catch(
+          () => {},
+        );
+      } else if (
+        target.closest(".testimonial-card") &&
+        target.tagName === "BUTTON"
+      ) {
+        recordVisitorEvent("open_testimonial", label || "Preuve avis").catch(
+          () => {},
+        );
+      }
+    }
+
+    document.addEventListener("click", handleTrackedClick, { passive: true });
+    return () => document.removeEventListener("click", handleTrackedClick);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";

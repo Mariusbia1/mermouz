@@ -22,6 +22,7 @@ const RequestsAdmin = lazy(() => import("./admin/pages/RequestsAdmin"));
 const TestimonialsAdmin = lazy(() => import("./admin/pages/TestimonialsAdmin"));
 const ContentAdmin = lazy(() => import("./admin/pages/ContentAdmin"));
 const SettingsAdmin = lazy(() => import("./admin/pages/SettingsAdmin"));
+const VisitorsAdmin = lazy(() => import("./admin/pages/VisitorsAdmin"));
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
               <Route path="services" element={<ServicesAdmin />} />
               <Route path="requests" element={<RequestsAdmin />} />
               <Route path="testimonials" element={<TestimonialsAdmin />} />
+              <Route path="visitors" element={<VisitorsAdmin />} />
               <Route path="content" element={<ContentAdmin />} />
               <Route path="settings" element={<SettingsAdmin />} />
             </Route>

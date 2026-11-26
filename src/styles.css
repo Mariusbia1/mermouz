@@ -4162,6 +4162,8 @@ textarea {
 }
 .project-card {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line);
   background: rgba(12, 18, 25, 0.72);
   overflow: hidden;
@@ -6431,6 +6433,7 @@ textarea {
 
 :root[data-theme="light"] :is(
     .service-row,
+    .project-card,
     .project-card-body,
     .testimonial-card,
     .quote-panel,
@@ -6450,6 +6453,7 @@ textarea {
 
 :root[data-theme="light"] :is(
     .service-row,
+    .project-card,
     .project-card-body,
     .testimonial-card,
     .quote-panel,
@@ -7576,6 +7580,9 @@ textarea {
 }
 .project-card-body {
   padding: 1.35rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .project-card-title {
   gap: 0.8rem;
@@ -8596,4 +8603,259 @@ textarea {
 :root[data-theme="light"] .admin-service-grid article footer button.admin-featured-active {
   background: rgba(62, 120, 181, 0.16);
   color: #142230;
+}
+
+/* =========================================================
+   Admin : Visiteurs & Activité + Diagnostic BDD
+   ========================================================= */
+.admin-visitors-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  gap: 1.2rem;
+  margin-top: 1.4rem;
+  align-items: start;
+}
+.admin-visitor-list,
+.admin-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-height: 560px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+.admin-visitor-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0.95rem;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.admin-visitor-row:hover,
+.admin-visitor-row.active {
+  border-color: var(--blue);
+  background: rgba(107, 157, 207, 0.1);
+}
+.admin-visitor-device {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(107, 157, 207, 0.12);
+  color: var(--blue);
+}
+.admin-visitor-device svg {
+  width: 18px;
+  height: 18px;
+}
+.admin-visitor-meta strong {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font: 500 0.86rem "Chillax", sans-serif;
+}
+.admin-visitor-meta strong small {
+  color: var(--blue);
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+.admin-visitor-meta > span {
+  display: block;
+  margin-top: 0.25rem;
+  color: #7d8d9b;
+  font-size: 0.74rem;
+}
+.admin-visitor-row time,
+.admin-timeline-item time {
+  color: #758492;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+.admin-inline-reset {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--blue);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.admin-event-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+.admin-event-filters button {
+  padding: 0.42rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: #8b9aa8;
+  font: 500 0.66rem "Chillax", sans-serif;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.admin-event-filters button.active,
+.admin-event-filters button:hover {
+  border-color: var(--blue);
+  background: rgba(107, 157, 207, 0.14);
+  color: var(--white);
+}
+.admin-timeline-item {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.015);
+}
+.admin-timeline-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+}
+.admin-timeline-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.admin-timeline-icon.tone-blue {
+  background: rgba(107, 157, 207, 0.14);
+  color: var(--blue);
+}
+.admin-timeline-icon.tone-green {
+  background: rgba(110, 215, 155, 0.14);
+  color: #6ed79b;
+}
+.admin-timeline-icon.tone-muted {
+  background: rgba(255, 255, 255, 0.06);
+  color: #9baab7;
+}
+.admin-timeline-body strong {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 500 0.82rem "Chillax", sans-serif;
+}
+.admin-timeline-body strong small {
+  padding: 0.12rem 0.42rem;
+  border-radius: 999px;
+  background: rgba(107, 157, 207, 0.14);
+  color: var(--blue);
+  font-size: 0.64rem;
+}
+.admin-timeline-body > span {
+  display: block;
+  margin-top: 0.2rem;
+  color: #81909d;
+  font-size: 0.76rem;
+  word-break: break-word;
+}
+.admin-empty-text {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #7c8b99;
+  font-size: 0.86rem;
+}
+.admin-health-panel {
+  margin-top: 1.4rem;
+}
+.admin-health-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font: 500 0.7rem "Chillax", sans-serif;
+}
+.admin-health-badge svg {
+  width: 15px;
+  height: 15px;
+}
+.admin-health-badge.ok {
+  background: rgba(110, 215, 155, 0.12);
+  color: #6ed79b;
+}
+.admin-health-badge.warn {
+  background: rgba(224, 140, 108, 0.14);
+  color: #eb9d7e;
+}
+.admin-health-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+.admin-health-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.admin-health-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.admin-health-item.ok svg {
+  color: #6ed79b;
+}
+.admin-health-item.warn svg {
+  color: #eb9d7e;
+}
+.admin-health-item strong {
+  display: block;
+  font: 500 0.84rem "Chillax", sans-serif;
+}
+.admin-health-item small {
+  color: #7c8b99;
+  font-size: 0.72rem;
+}
+.admin-stats-editor {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.admin-stats-editor h3 {
+  margin: 0 0 1rem;
+  font: 500 0.95rem "Chillax", sans-serif;
+}
+.admin-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+.admin-page-head button.admin-reset-button {
+  background: rgba(190, 92, 92, 0.1);
+  border: 1px solid rgba(190, 92, 92, 0.28);
+  color: #e2a2a2;
+}
+.admin-page-head button.admin-reset-button:hover:not(:disabled) {
+  background: rgba(190, 92, 92, 0.2);
+  border-color: #d07878;
+}
+.admin-page-head button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+@media (max-width: 960px) {
+  .admin-visitors-layout {
+    grid-template-columns: 1fr;
+  }
 }
