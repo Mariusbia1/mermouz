@@ -8841,6 +8841,26 @@ textarea {
   align-items: center;
   gap: 0.65rem;
 }
+.admin-page-head button.admin-icon-button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+}
+.admin-page-head button.admin-icon-button svg {
+  width: 18px;
+  height: 18px;
+}
+.admin-page-head button.admin-icon-button svg.spin {
+  animation: adminSpin 0.8s linear infinite;
+}
+@keyframes adminSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .admin-page-head button.admin-reset-button {
   background: rgba(190, 92, 92, 0.1);
   border: 1px solid rgba(190, 92, 92, 0.28);

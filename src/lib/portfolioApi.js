@@ -149,21 +149,7 @@ export async function resetVisitorActivity() {
   const currentVisits = Number(statsRow?.total_visits || 0);
   const currentActions = Number(actionsCountResult.count || 0);
 
-  const nextArchive = {
-    archived_visitors: archive.archived_visitors + currentVisitors,
-    archived_visits: archive.archived_visits + currentVisits,
-    archived_actions: archive.archived_actions + currentActions,
-    last_reset_at: new Date().toISOString(),
-  };
-
-  // Sauvegarde d'abord les totaux historiques avant de vider les tables
-  const { error: archiveError } = await supabase.from("site_settings").upsert({
-    key: "analytics_archive",
-    value: nextArchive,
-    updated_at: new Date().toISOString(),
-  });
-  if (archiveError) throw archiveError;
-
+  // Supprime définitivement les lignes en base de données
   const [delEvents, delVisits] = await Promise.all([
     supabase.from("visitor_events").delete().gte("id", 0),
     supabase.from("website_visits").delete().gte("id", 0),
@@ -172,6 +158,31 @@ export async function resetVisitorActivity() {
   if (delEvents.error && !delEvents.error.message?.includes("does not exist")) {
     throw delEvents.error;
   }
+
+  // Vérifie que la suppression a bien eu lieu (RLS peut renvoyer 0 erreur mais 0 ligne supprimée)
+  const { count: remainingVisits } = await supabase
+    .from("website_visits")
+    .select("id", { count: "exact", head: true });
+  if (currentVisits > 0 && Number(remainingVisits || 0) > 0) {
+    throw new Error(
+      "row-level security: suppression bloquée sur website_visits. Exécutez la politique DELETE dans Supabase SQL Editor.",
+    );
+  }
+
+  const nextArchive = {
+    archived_visitors: archive.archived_visitors + currentVisitors,
+    archived_visits: archive.archived_visits + currentVisits,
+    archived_actions: archive.archived_actions + currentActions,
+    last_reset_at: new Date().toISOString(),
+  };
+
+  // Enregistre le cumul historique pour garder le total depuis le début
+  const { error: archiveError } = await supabase.from("site_settings").upsert({
+    key: "analytics_archive",
+    value: nextArchive,
+    updated_at: new Date().toISOString(),
+  });
+  if (archiveError) throw archiveError;
 
   return nextArchive;
 }
