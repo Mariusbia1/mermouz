@@ -815,6 +815,7 @@ textarea {
   min-height: calc(100vh - 90px);
   position: relative;
   z-index: 2;
+  overflow-x: clip;
 }
 .home-hero {
   height: calc(100vh - 90px);

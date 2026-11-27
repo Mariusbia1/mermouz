@@ -139,22 +139,22 @@ export default function Resume() {
       </section>
 
       <section className="career-summary">
-        <article>
+        <article data-aos="fade-up" data-aos-delay="0">
           <strong>2</strong>
           <span>ans d’expérience</span>
         </article>
-        <article>
+        <article data-aos="fade-up" data-aos-delay="90">
           <strong>4</strong>
           <span>expériences en entreprise</span>
         </article>
-        <article>
+        <article data-aos="fade-up" data-aos-delay="180">
           <strong>1</strong>
           <span>licence en Informatique de gestion</span>
         </article>
       </section>
 
       <section className="career-experience">
-        <header className="career-section-head">
+        <header className="career-section-head" data-aos="fade-up">
           <div>
             <BriefcaseBusiness />
             <span>EXPÉRIENCES</span>
@@ -162,8 +162,12 @@ export default function Resume() {
           <h2>Des étapes qui ont construit ma façon de travailler.</h2>
         </header>
         <div className="career-timeline">
-          {cvExperiences.map((item) => (
-            <article key={`${item.company}-${item.period}`}>
+          {cvExperiences.map((item, index) => (
+            <article
+              key={`${item.company}-${item.period}`}
+              data-aos="fade-up"
+              data-aos-delay={(index % 3) * 80}
+            >
               <div className="career-date">
                 <i className={item.current ? "active" : ""} />
                 <span>{item.period}</span>
@@ -183,7 +187,7 @@ export default function Resume() {
       </section>
 
       <section className="career-education">
-        <header className="career-section-head">
+        <header className="career-section-head" data-aos="fade-up">
           <div>
             <GraduationCap />
             <span>FORMATION</span>
@@ -193,8 +197,12 @@ export default function Resume() {
           </h2>
         </header>
         <div className="education-cards">
-          {cvEducation.map((item) => (
-            <article key={`${item.title}-${item.period}`}>
+          {cvEducation.map((item, index) => (
+            <article
+              key={`${item.title}-${item.period}`}
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
+            >
               <span>{item.period}</span>
               <h3>{item.title}</h3>
               <p>{item.school}</p>
@@ -205,7 +213,7 @@ export default function Resume() {
       </section>
 
       <section className="career-skills">
-        <header className="career-section-head">
+        <header className="career-section-head" data-aos="fade-up">
           <div>
             <Code2 />
             <span>CE QUE JE SAIS FAIRE</span>
@@ -225,7 +233,11 @@ export default function Resume() {
               Gauge,
             ][index % 8];
             return (
-              <article key={`${title}-${index}`}>
+              <article
+                key={`${title}-${index}`}
+                data-aos="zoom-in-up"
+                data-aos-delay={(index % 4) * 70}
+              >
                 <Icon />
                 <h3>{title}</h3>
                 <p>{text}</p>
@@ -235,7 +247,7 @@ export default function Resume() {
         </div>
       </section>
 
-      <section className="career-contact">
+      <section className="career-contact" data-aos="zoom-in">
         <span>UNE IDÉE À CONCRÉTISER ?</span>
         <h2>Mon prochain projet peut être le vôtre.</h2>
         <Link className="neo-primary" to="/contact">

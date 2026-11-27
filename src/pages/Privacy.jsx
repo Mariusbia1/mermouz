@@ -21,7 +21,7 @@ export default function Privacy() {
         </p>
       </header>
 
-      <section className="privacy-intro">
+      <section className="privacy-intro" data-aos="fade-up">
         <ShieldCheck />
         <p>
           Je collecte uniquement les informations nécessaires pour comprendre
@@ -32,7 +32,7 @@ export default function Privacy() {
       </section>
 
       <section className="privacy-grid">
-        <article>
+        <article data-aos="fade-up" data-aos-delay="0">
           <span>01</span>
           <h2>Informations recueillies</h2>
           <p>
@@ -41,7 +41,7 @@ export default function Privacy() {
             le service recherché et le message décrivant votre projet.
           </p>
         </article>
-        <article>
+        <article data-aos="fade-up" data-aos-delay="80">
           <span>02</span>
           <h2>Pourquoi elles sont utilisées</h2>
           <p>
@@ -50,7 +50,7 @@ export default function Privacy() {
             échanges concernant votre projet numérique.
           </p>
         </article>
-        <article>
+        <article data-aos="fade-up" data-aos-delay="160">
           <span>03</span>
           <h2>Mesure de fréquentation</h2>
           <p>
@@ -60,7 +60,7 @@ export default function Privacy() {
             portfolio et ne servent pas à établir un profil publicitaire.
           </p>
         </article>
-        <article>
+        <article data-aos="fade-up" data-aos-delay="0">
           <span>04</span>
           <h2>Stockage et sécurité</h2>
           <p>
@@ -69,7 +69,7 @@ export default function Privacy() {
             l’espace d’administration protégé.
           </p>
         </article>
-        <article>
+        <article data-aos="fade-up" data-aos-delay="80">
           <span>05</span>
           <h2>Durée de conservation</h2>
           <p>
@@ -78,7 +78,7 @@ export default function Privacy() {
             ne sont plus utiles peuvent ensuite être supprimées.
           </p>
         </article>
-        <article>
+        <article data-aos="fade-up" data-aos-delay="160">
           <span>06</span>
           <h2>Vos droits</h2>
           <p>
@@ -89,7 +89,7 @@ export default function Privacy() {
         </article>
       </section>
 
-      <section className="privacy-contact">
+      <section className="privacy-contact" data-aos="zoom-in">
         <div>
           <span>UNE QUESTION SUR VOS DONNÉES ?</span>
           <h2>Écrivez-moi directement.</h2>

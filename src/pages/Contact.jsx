@@ -46,7 +46,7 @@ export default function Contact() {
         </h1>
       </header>
       <section className="contact-grid">
-        <div>
+        <div data-aos="fade-right">
           <p>
             Vous souhaitez créer un site, une boutique en ligne ou une solution
             numérique pour votre activité ? Expliquez-moi votre idée. Je vous
@@ -56,7 +56,7 @@ export default function Contact() {
             {content.profile.email} <ArrowUpRight />
           </a>
         </div>
-        <form onSubmit={submit}>
+        <form onSubmit={submit} data-aos="fade-left" data-aos-delay="100">
           <label>
             VOTRE NOM
             <input

@@ -21,7 +21,7 @@ export default function About() {
   return (
     <motion.main className="page inner-page about-page" {...pageMotion}>
       <section className="about-hero">
-        <div className="about-story">
+        <div className="about-story" data-aos="fade-right">
           <span className="about-kicker">
             {content.profile.fullName.toUpperCase()}
           </span>
@@ -46,7 +46,7 @@ export default function About() {
           </div>
         </div>
 
-        <div className="about-photo-wrap">
+        <div className="about-photo-wrap" data-aos="fade-left" data-aos-delay="120">
           <div
             className="about-photo"
             style={{ backgroundImage: `url(${content.profile.photoUrl})` }}
@@ -62,7 +62,7 @@ export default function About() {
       </section>
 
       <section className="about-now">
-        <header className="about-now-head">
+        <header className="about-now-head" data-aos="fade-up">
           <span>AU-DELÀ DU MÉTIER</span>
           <h2>Ce qui m’anime et ce que je veux construire.</h2>
           <p>
@@ -71,25 +71,25 @@ export default function About() {
           </p>
         </header>
         <div className="about-now-grid">
-          <article>
+          <article data-aos="fade-up" data-aos-delay="0">
             <Heart />
             <span>MA PASSION</span>
             <h3>Donner vie aux idées</h3>
             <p>{content.about.passion}</p>
           </article>
-          <article>
+          <article data-aos="fade-up" data-aos-delay="80">
             <Compass />
             <span>MA VISION</span>
             <h3>Créer des possibilités</h3>
             <p>{content.about.vision}</p>
           </article>
-          <article>
+          <article data-aos="fade-up" data-aos-delay="160">
             <Rocket />
             <span>MON RÊVE</span>
             <h3>Construire au-delà des frontières</h3>
             <p>{content.about.dream}</p>
           </article>
-          <article>
+          <article data-aos="fade-up" data-aos-delay="240">
             <UserRound />
             <span>MA PERSONNALITÉ</span>
             <h3>Avancer avec exigence et sincérité</h3>
@@ -99,34 +99,34 @@ export default function About() {
       </section>
 
       <section className="about-method">
-        <header className="about-method-head">
+        <header className="about-method-head" data-aos="fade-up">
           <span>MA MÉTHODE DE TRAVAIL</span>
           <h2>Une collaboration claire, du premier échange à la livraison.</h2>
           <p>{content.about.methodIntro}</p>
         </header>
         <div className="about-method-grid">
-          <article>
+          <article data-aos="fade-up" data-aos-delay="0">
             <MessagesSquare />
             <h3>{content.about.methodDiscoveryTitle}</h3>
             <p>{content.about.methodDiscoveryText}</p>
           </article>
-          <article>
+          <article data-aos="fade-up" data-aos-delay="80">
             <PenTool />
             <h3>{content.about.methodDirectionTitle}</h3>
             <p>{content.about.methodDirectionText}</p>
           </article>
-          <article>
+          <article data-aos="fade-up" data-aos-delay="160">
             <Code2 />
             <h3>{content.about.methodCreationTitle}</h3>
             <p>{content.about.methodCreationText}</p>
           </article>
-          <article>
+          <article data-aos="fade-up" data-aos-delay="240">
             <CheckCircle2 />
             <h3>{content.about.methodDeliveryTitle}</h3>
             <p>{content.about.methodDeliveryText}</p>
           </article>
         </div>
-        <div className="about-method-action">
+        <div className="about-method-action" data-aos="fade-up">
           <p>
             Vous avez une idée en tête ? Commençons par en parler simplement.
           </p>
@@ -140,33 +140,33 @@ export default function About() {
       </section>
 
       <section className="about-values">
-        <div className="about-values-head">
+        <div className="about-values-head" data-aos="fade-up">
           <span>CE QUI ME DÉFINIT</span>
           <h2>Des valeurs simples que j’essaie de vivre chaque jour.</h2>
         </div>
         <div className="about-value-grid">
-          <article>
+          <article data-aos="zoom-in-up" data-aos-delay="0">
             <span>Curiosité</span>
             <p>
               J’aime poser des questions, découvrir de nouvelles idées et ne
               jamais considérer que j’ai fini d’apprendre.
             </p>
           </article>
-          <article>
+          <article data-aos="zoom-in-up" data-aos-delay="80">
             <span>Persévérance</span>
             <p>
               Une difficulté n’est pas une raison d’abandonner. Je cherche,
               j’essaie et je progresse jusqu’à trouver une voie.
             </p>
           </article>
-          <article>
+          <article data-aos="zoom-in-up" data-aos-delay="160">
             <span>Ambition</span>
             <p>
               Je veux construire des choses importantes sans oublier que les
               grands parcours commencent souvent par de petites étapes.
             </p>
           </article>
-          <article>
+          <article data-aos="zoom-in-up" data-aos-delay="240">
             <span>Respect</span>
             <p>
               J’accorde de l’importance à l’écoute, à l’honnêteté et aux
