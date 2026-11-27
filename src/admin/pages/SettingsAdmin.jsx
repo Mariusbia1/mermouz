@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Database,
+  EyeOff,
   KeyRound,
   LockKeyhole,
   RefreshCw,
@@ -8,7 +9,11 @@ import {
   X,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
-import { checkDatabaseHealth } from "../../lib/portfolioApi";
+import {
+  checkDatabaseHealth,
+  isOwnerTrackingIgnored,
+  setOwnerTrackingIgnored,
+} from "../../lib/portfolioApi";
 
 export default function SettingsAdmin() {
   const [email, setEmail] = useState("");
@@ -19,6 +24,13 @@ export default function SettingsAdmin() {
   const [messageError, setMessageError] = useState(false);
   const [health, setHealth] = useState(null);
   const [checking, setChecking] = useState(true);
+  const [ignoreMyVisits, setIgnoreMyVisits] = useState(isOwnerTrackingIgnored);
+
+  function toggleIgnoreMyVisits() {
+    const next = !ignoreMyVisits;
+    setOwnerTrackingIgnored(next);
+    setIgnoreMyVisits(next);
+  }
 
   async function runHealthCheck() {
     setChecking(true);
@@ -153,6 +165,20 @@ export default function SettingsAdmin() {
           </div>
           <button onClick={runHealthCheck} disabled={checking}>
             <RefreshCw /> {checking ? "Vérification…" : "Revérifier"}
+          </button>
+        </article>
+        <article>
+          <EyeOff />
+          <div>
+            <h2>Mes propres visites</h2>
+            <p>
+              {ignoreMyVisits
+                ? "Cet appareil est exclu des statistiques de visites et d’actions (même déconnecté)."
+                : "Les visites depuis cet appareil sont comptées lorsque vous êtes déconnecté."}
+            </p>
+          </div>
+          <button type="button" onClick={toggleIgnoreMyVisits}>
+            {ignoreMyVisits ? "Exclu (actif)" : "Exclure cet appareil"}
           </button>
         </article>
       </section>
