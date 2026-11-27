@@ -60,11 +60,15 @@ export default function Layout() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => AOS.refresh(), 120);
+    const t1 = window.setTimeout(() => AOS.refreshHard(), 120);
+    const t2 = window.setTimeout(() => AOS.refresh(), 500);
     recordVisit(location.pathname).catch(() => {
       // Les statistiques ne doivent jamais bloquer l’affichage du site.
     });
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
   }, [location.pathname]);
 
   // Suivi automatique des actions clés du visiteur (clics services, projets, contact, CV, réseaux...)

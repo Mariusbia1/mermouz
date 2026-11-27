@@ -297,7 +297,7 @@ export default function ServiceDetail() {
             </div>
           </header>
 
-          <section className="detail-included">
+          <section className="detail-included" data-aos="fade-up">
             <span className="detail-section-label">
               LA QUALITÉ INTÉGRÉE À VOTRE PROJET
             </span>
@@ -315,7 +315,7 @@ export default function ServiceDetail() {
               ))}
             </div>
             {service.deliverables.length > 0 && (
-              <div className="detail-deliverables">
+              <div className="detail-deliverables" data-aos="fade-up">
                 <h3>Ce qui est inclus dans votre accompagnement</h3>
                 <div className="included-list">
                   {service.deliverables.map((item) => (
@@ -328,24 +328,38 @@ export default function ServiceDetail() {
               </div>
             )}
             <div className="quality-grid">
-              {qualityFeatures.map(({ icon: FeatureIcon, title, text }) => (
-                <article key={title}>
-                  <FeatureIcon />
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{text}</p>
-                  </div>
-                </article>
-              ))}
+              {qualityFeatures.map(
+                ({ icon: FeatureIcon, title, text }, index) => (
+                  <article
+                    key={title}
+                    data-aos="fade-up"
+                    data-aos-delay={(index % 2) * 80}
+                  >
+                    <FeatureIcon />
+                    <div>
+                      <h3>{title}</h3>
+                      <p>{text}</p>
+                    </div>
+                  </article>
+                ),
+              )}
             </div>
           </section>
 
           <section className="detail-method">
-            <span className="detail-section-label">MA MÉTHODE DE TRAVAIL</span>
-            <h2>Un processus simple pour construire sans confusion.</h2>
+            <span className="detail-section-label" data-aos="fade-up">
+              MA MÉTHODE DE TRAVAIL
+            </span>
+            <h2 data-aos="fade-up">
+              Un processus simple pour construire sans confusion.
+            </h2>
             <div className="method-list">
               {workSteps.map((step, index) => (
-                <article key={step.title}>
+                <article
+                  key={step.title}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 80}
+                >
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <div>
                     <h3>{step.title}</h3>
@@ -357,7 +371,7 @@ export default function ServiceDetail() {
           </section>
         </div>
 
-        <aside className="quote-panel">
+        <aside className="quote-panel" data-aos="fade-left" data-aos-delay="120">
           <div className="quote-panel-head">
             <span>DEMANDE DE DEVIS</span>
             <h2>Parlons de votre projet.</h2>
