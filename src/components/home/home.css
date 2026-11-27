@@ -241,7 +241,7 @@
   transform: translateY(-4px);
 }
 .hs-work-visual {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   position: relative;
   display: grid;
   place-items: center;
@@ -270,12 +270,13 @@
 .hs-work-visual img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.45s ease;
 }
 .hs-work:hover .hs-work-visual > svg,
 .hs-work:hover .hs-work-visual img {
-  transform: scale(1.06);
+  transform: scale(1.02);
 }
 .hs-work-category {
   position: absolute;
