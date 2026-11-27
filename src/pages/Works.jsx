@@ -44,27 +44,18 @@ export default function Works() {
               data-aos-delay={(index % 3) * 90}
             >
               <div className="project-card-visual">
-                <span className="project-category">{category}</span>
-                <Icon />
                 {image_url ? (
-                  <div className="project-device-showcase">
-                    <div className="device desktop">
-                      <div className="device-bar" />
-                      <img
-                        src={image_url}
-                        alt={`Capture de ${title}`}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                  </div>
+                  <img
+                    className="project-card-cover"
+                    src={image_url}
+                    alt={`Aperçu du projet ${title}`}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : (
-                  <div className="project-window">
-                    <i />
-                    <i />
-                    <i />
-                  </div>
+                  <Icon aria-hidden="true" />
                 )}
+                <span className="project-category">{category}</span>
               </div>
               <div className="project-card-body">
                 <div className="project-card-title">

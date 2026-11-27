@@ -8880,3 +8880,67 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   Page Projets : visuel plein cadre identique à l'accueil
+   ========================================================= */
+.projects-page .project-card-visual {
+  height: auto;
+  aspect-ratio: 16 / 10;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: var(--blue);
+}
+.projects-page .project-card-visual:after {
+  display: none;
+}
+.projects-page .project-card-cover {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.5s ease;
+}
+.projects-page .project-card-visual > svg {
+  position: static;
+  width: 64px;
+  height: 64px;
+  stroke-width: 1.1;
+  transition: transform 0.4s ease;
+}
+.projects-page .project-card:hover .project-card-cover,
+.projects-page .project-card:hover .project-card-visual > svg {
+  transform: scale(1.06);
+}
+.projects-page .project-category {
+  left: 1rem;
+  top: 1rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 100px;
+  background: rgba(8, 16, 25, 0.75);
+  backdrop-filter: blur(6px);
+  color: #c5d0da;
+  font: 500 0.58rem "Chillax", sans-serif;
+  letter-spacing: 0.08em;
+}
+:root[data-theme="light"] .projects-page .project-card-visual {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(62, 120, 181, 0.22), transparent 55%),
+    linear-gradient(145deg, #e6eef5, #d5e2ee);
+}
+:root[data-theme="light"] .projects-page .project-card-navy .project-card-visual {
+  background:
+    radial-gradient(circle at 70% 25%, rgba(40, 93, 148, 0.22), transparent 55%),
+    linear-gradient(145deg, #dde8f2, #cbdbea);
+}
+:root[data-theme="light"] .projects-page .project-card-slate .project-card-visual {
+  background:
+    radial-gradient(circle at 40% 80%, rgba(82, 100, 115, 0.2), transparent 55%),
+    linear-gradient(145deg, #e8edf1, #d8e0e6);
+}
+:root[data-theme="light"] .projects-page .project-category {
+  background: rgba(255, 255, 255, 0.85);
+  color: #2c3e4e;
+}
