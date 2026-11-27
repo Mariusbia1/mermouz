@@ -77,7 +77,7 @@ export default function TestimonialsSection({ items }) {
 
   return (
     <section className="testimonials-section">
-      <header className="testimonials-head">
+      <header className="testimonials-head" data-aos="fade-up">
         <span>TÉMOIGNAGES</span>
         <h2>
           Des collaborations qui parlent
@@ -92,6 +92,8 @@ export default function TestimonialsSection({ items }) {
 
       <div
         className="testimonials-marquee"
+        data-aos="fade-up"
+        data-aos-delay="120"
         style={{ "--drift-duration": driftDuration }}
       >
         <div className="testimonials-track">

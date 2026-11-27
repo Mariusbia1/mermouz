@@ -8,7 +8,7 @@ export default function HomeCta({ content }) {
 
   return (
     <section className="hs-section" aria-labelledby="home-cta-title">
-      <Reveal className="hs-cta">
+      <Reveal className="hs-cta" aos="zoom-in">
         <span className="hs-kicker">PARLONS DE VOTRE PROJET</span>
         <h2 id="home-cta-title">
           Vous avez une idée ou une activité à développer ?{" "}

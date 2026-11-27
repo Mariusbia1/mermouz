@@ -4,6 +4,7 @@
    ========================================================= */
 
 .home {
+  overflow-x: clip;
   --hs-muted: #81909c;
   --hs-soft: #c0cad3;
   --hs-title: #d3dde6;

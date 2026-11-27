@@ -22,8 +22,14 @@ export default function Services() {
         </p>
       </header>
       <section className="services-list">
-        {services.map(({ slug, title, short, icon: Icon }) => (
-          <Link className="service-row" to={`/services/${slug}`} key={slug}>
+        {services.map(({ slug, title, short, icon: Icon }, index) => (
+          <Link
+            className="service-row"
+            to={`/services/${slug}`}
+            key={slug}
+            data-aos="fade-up"
+            data-aos-delay={(index % 3) * 80}
+          >
             <div className="service-icon">
               <Icon />
             </div>

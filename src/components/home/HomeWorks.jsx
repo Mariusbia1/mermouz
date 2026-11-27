@@ -28,7 +28,11 @@ export default function HomeWorks({ projects }) {
             : { to: "/works" };
 
           return (
-            <Reveal key={project.id ?? project.title} delay={index * 0.08}>
+            <Reveal
+              key={project.id ?? project.title}
+              aos="zoom-in-up"
+              delay={index * 0.1}
+            >
               <Wrapper className={`hs-work hs-work-${project.tone}`} {...wrapperProps}>
                 <div className="hs-work-visual">
                   {project.image_url ? (

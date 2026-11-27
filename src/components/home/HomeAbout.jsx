@@ -18,7 +18,7 @@ export default function HomeAbout({ content }) {
 
   return (
     <section className="hs-section hs-about" aria-labelledby="home-about-title">
-      <Reveal className="hs-about-copy">
+      <Reveal className="hs-about-copy" aos="fade-right">
         <span className="hs-kicker">QUI SUIS-JE</span>
         <h2 id="home-about-title">
           {about.title} <em>{about.accent}</em>
@@ -30,7 +30,7 @@ export default function HomeAbout({ content }) {
         </Link>
       </Reveal>
 
-      <Reveal className="hs-about-facts" delay={0.1}>
+      <Reveal className="hs-about-facts" aos="fade-left" delay={0.12}>
         {facts.map(({ icon: Icon, label, value }) => (
           <div className="hs-fact" key={label}>
             <span className="hs-fact-icon">
