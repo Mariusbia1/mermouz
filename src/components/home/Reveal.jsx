@@ -1,17 +1,27 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
 
-/** Apparition douce au scroll (désactivée si l'utilisateur préfère réduire les animations). */
-export function Reveal({ as = "div", delay = 0, className, children, ...rest }) {
-  const reduce = useReducedMotion();
-  const Tag = motion[as] ?? motion.div;
+/**
+ * Wrapper d'animation au scroll propulsé par AOS (Animate On Scroll).
+ * Accepte `aos` (fade-up, fade-right, fade-left, zoom-in-up, zoom-in...)
+ * et `delay` en secondes (converti en ms pour data-aos-delay).
+ */
+export function Reveal({
+  as = "div",
+  aos = "fade-up",
+  delay = 0,
+  duration,
+  className,
+  children,
+  ...rest
+}) {
+  const Tag = as;
+  const delayMs = delay ? Math.round(delay * 1000) : undefined;
   return (
     <Tag
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: [0.2, 0.7, 0.2, 1] }}
+      data-aos={aos}
+      data-aos-delay={delayMs}
+      data-aos-duration={duration}
       {...rest}
     >
       {children}
@@ -20,9 +30,17 @@ export function Reveal({ as = "div", delay = 0, className, children, ...rest }) 
 }
 
 /** En-tête de section homogène : sur-titre, titre + accent, texte. */
-export function SectionHead({ kicker, title, accent, text, align = "left", id }) {
+export function SectionHead({
+  kicker,
+  title,
+  accent,
+  text,
+  align = "left",
+  id,
+  aos = "fade-up",
+}) {
   return (
-    <Reveal className={`hs-head hs-head-${align}`}>
+    <Reveal className={`hs-head hs-head-${align}`} aos={aos}>
       <span className="hs-kicker">{kicker}</span>
       <h2 id={id}>
         {title} {accent && <em>{accent}</em>}

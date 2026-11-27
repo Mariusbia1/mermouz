@@ -1,5 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
 import {
   FaFacebookF,
@@ -47,9 +49,22 @@ export default function Layout() {
   }, [theme]);
 
   useEffect(() => {
+    AOS.init({
+      duration: 750,
+      easing: "ease-out-cubic",
+      once: true,
+      offset: 70,
+      disable: () =>
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    });
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => AOS.refresh(), 120);
     recordVisit(location.pathname).catch(() => {
       // Les statistiques ne doivent jamais bloquer l’affichage du site.
     });
+    return () => window.clearTimeout(timer);
   }, [location.pathname]);
 
   // Suivi automatique des actions clés du visiteur (clics services, projets, contact, CV, réseaux...)

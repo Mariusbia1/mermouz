@@ -24,19 +24,24 @@ export default function Works() {
 
       <section className="projects-grid">
         {visibleProjects.map(
-          ({
-            title,
-            category,
-            description,
-            tags,
-            icon: Icon,
-            tone,
-            project_url,
-            image_url,
-          }) => (
+          (
+            {
+              title,
+              category,
+              description,
+              tags,
+              icon: Icon,
+              tone,
+              project_url,
+              image_url,
+            },
+            index,
+          ) => (
             <article
               className={`project-card project-card-${tone}`}
               key={title}
+              data-aos="zoom-in-up"
+              data-aos-delay={(index % 3) * 90}
             >
               <div className="project-card-visual">
                 <span className="project-category">{category}</span>
