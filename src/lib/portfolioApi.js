@@ -5,6 +5,48 @@ import { defaultTestimonials } from "../data/testimonials";
 const VISITOR_KEY = "mermouz_visitor_id";
 const SESSION_KEY = "mermouz_session_id";
 const LOCAL_VISITS_KEY = "mermouz_local_visitors";
+const IGNORE_TRACKING_KEY = "mermouz_ignore_tracking";
+
+export function isOwnerTrackingIgnored() {
+  try {
+    return localStorage.getItem(IGNORE_TRACKING_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function setOwnerTrackingIgnored(ignored) {
+  try {
+    localStorage.setItem(IGNORE_TRACKING_KEY, ignored ? "1" : "0");
+  } catch {
+    // Ignore les environnements sans localStorage.
+  }
+}
+
+export function markAdminDevice() {
+  try {
+    if (localStorage.getItem(IGNORE_TRACKING_KEY) !== "0") {
+      localStorage.setItem(IGNORE_TRACKING_KEY, "1");
+    }
+  } catch {
+    // Ignore les environnements sans localStorage.
+  }
+}
+
+async function shouldSkipTracking() {
+  if (isOwnerTrackingIgnored()) return true;
+  if (!isSupabaseConfigured) return false;
+  try {
+    const { data } = await supabase.auth.getSession();
+    if (data?.session) {
+      markAdminDevice();
+      return true;
+    }
+  } catch {
+    // Ne bloque pas le suivi public en cas d'erreur de lecture session.
+  }
+  return false;
+}
 
 function getVisitorId() {
   let visitorId = localStorage.getItem(VISITOR_KEY);
@@ -56,6 +98,7 @@ export async function recordVisitorEvent(
   if (!isSupabaseConfigured) return;
   const pathname = window.location.pathname || "/";
   if (pathname.startsWith("/admin")) return;
+  if (await shouldSkipTracking()) return;
 
   const visitorId = getVisitorId();
   const sessionId = getSessionId();
@@ -71,6 +114,7 @@ export async function recordVisitorEvent(
 
 export async function recordVisit(pathname) {
   if (pathname.startsWith("/admin")) return;
+  if (await shouldSkipTracking()) return;
   const visitorId = getVisitorId();
   if (!isSupabaseConfigured) {
     const visitors = new Set(
